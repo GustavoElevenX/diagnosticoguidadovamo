@@ -49,5 +49,5 @@ app.get(['/diagnostico', '/raio-x-comercial'], (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`VAMO Raio-X Comercial rodando em http://localhost:${PORT}`);
+  console.log(`VAMO Mapa de Vazamento de Vendas rodando em http://localhost:${PORT}`);
 });

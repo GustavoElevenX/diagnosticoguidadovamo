@@ -1,6 +1,6 @@
-# Mapa de Previsibilidade VAMO
+# Mapa de Vazamento de Vendas VAMO
 
-Diagnóstico guiado comercial da VAMO em formato de micro-app estático com APIs server-side em Express e Netlify Functions.
+Diagnóstico guiado comercial da VAMO em formato de micro-app estático com APIs server-side em Express, Netlify Functions e Vercel Functions.
 
 ## Decisão de arquitetura
 
@@ -8,10 +8,10 @@ Este projeto roda como app separado para o MVP:
 
 - Frontend estático em `index.html`
 - Servidor local Express em `server.js`
-- Deploy recomendado em Netlify
+- Deploy em Netlify ou Vercel
 - Persistência no Supabase
 - IA apenas no backend/server-side
-- Aprendizado diário via Netlify Scheduled Function
+- Aprendizado diário via Netlify Scheduled Function ou endpoint interno
 
 Se a VAMO decidir integrar dentro da plataforma principal em Next.js, a lógica central já está isolada em `lib/` para reaproveitamento.
 

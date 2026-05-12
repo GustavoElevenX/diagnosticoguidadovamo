@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mapa de Previsibilidade VAMO</title>
+  <title>Mapa de Vazamento de Vendas VAMO</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -27,26 +27,32 @@
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
       background:
         radial-gradient(circle at 20% 0%, rgba(0, 255, 106, .08), transparent 32rem),
         linear-gradient(180deg, #0b0d0c 0%, var(--bg) 46%, #050605 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     button, input, textarea { font: inherit; }
     button { cursor: pointer; }
 
     .app-shell {
-      min-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
       display: grid;
       grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+      overflow: hidden;
     }
 
     .side {
-      min-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
       padding: 32px;
       border-right: 1px solid var(--line);
       background: rgba(10, 12, 11, .78);
@@ -55,6 +61,7 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
+      overflow: hidden;
     }
 
     .brand {
@@ -64,7 +71,7 @@
     }
 
     .brand img {
-      width: 92px;
+      width: 86px;
       height: auto;
       display: block;
     }
@@ -84,9 +91,11 @@
 
     .side h1 {
       margin: 0;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1;
+      max-width: 100%;
+      font-size: clamp(31px, 3.2vw, 42px);
+      line-height: 1.06;
       letter-spacing: 0;
+      text-wrap: balance;
     }
 
     .side p {
@@ -127,14 +136,20 @@
 
     .main {
       min-width: 0;
+      min-height: 0;
+      height: 100vh;
+      height: 100dvh;
       padding: 28px;
       display: flex;
       justify-content: center;
+      overflow: hidden;
     }
 
     .chat-panel {
       width: min(100%, 920px);
-      min-height: calc(100vh - 56px);
+      height: calc(100vh - 56px);
+      height: calc(100dvh - 56px);
+      min-height: 0;
       display: grid;
       grid-template-rows: auto 1fr auto;
       border: 1px solid var(--line);
@@ -224,6 +239,7 @@
     .chat-scroll {
       min-height: 0;
       overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 24px;
       display: flex;
       flex-direction: column;
@@ -618,23 +634,54 @@
     .hidden { display: none !important; }
 
     @media (max-width: 980px) {
-      .app-shell { grid-template-columns: 1fr; }
+      body { overflow-y: auto; }
+      .app-shell {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        grid-template-columns: 1fr;
+        overflow: visible;
+      }
       .side {
+        height: auto;
         min-height: auto;
         position: relative;
         border-right: 0;
         border-bottom: 1px solid var(--line);
+        gap: 16px;
+        overflow: visible;
+      }
+      .brand img { width: 72px; }
+      .side h1 { font-size: clamp(32px, 8vw, 44px); }
+      .side p { max-width: 640px; }
+      .main {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
       }
       .side-list { margin-top: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .chat-panel { min-height: 760px; }
+      .chat-panel {
+        height: calc(100vh - 56px);
+        height: calc(100dvh - 56px);
+        min-height: 640px;
+      }
     }
 
     @media (max-width: 720px) {
       .main { padding: 14px; }
       .side { padding: 22px 18px; }
+      .brand { gap: 12px; }
+      .brand img { width: 64px; }
+      .side h1 {
+        font-size: clamp(30px, 10vw, 38px);
+        line-height: 1.08;
+      }
+      .side p { font-size: 14px; line-height: 1.55; }
       .side-list { grid-template-columns: 1fr; }
       .chat-panel {
-        min-height: calc(100vh - 28px);
+        height: calc(100vh - 28px);
+        height: calc(100dvh - 28px);
+        min-height: 0;
         border-radius: 14px;
       }
       .quick-grid, .input-grid, .input-row { grid-template-columns: 1fr; }
@@ -653,15 +700,15 @@
   <div class="app-shell">
     <aside class="side">
       <div class="brand">
-        <img src="imagens/Logo alta qualidade.png" alt="VAMO" />
+        <img src="/imagens/logo-vamo.png" alt="VAMO" loading="eager" />
         <div class="brand-badge">IA Comercial</div>
       </div>
-      <h1>Mapa de Previsibilidade VAMO</h1>
-      <p>Uma inteligência comercial criada para identificar onde sua operação perde previsibilidade, performance e dinheiro depois que o lead chega.</p>
+      <h1>Mapa de Vazamento de Vendas VAMO</h1>
+      <p>Descubra onde sua operação comercial está deixando vendas escaparem. Em poucos minutos, a IA da VAMO identifica os principais vazamentos antes do fechamento.</p>
       <div class="side-list">
-        <div class="side-item"><span>1</span><div>Conversa guiada, sem virar um formulário comum.</div></div>
-        <div class="side-item"><span>2</span><div>Scores, vazamentos e contradições ao final.</div></div>
-        <div class="side-item"><span>3</span><div>Plano de ação em 3 passos para corrigir a rota.</div></div>
+        <div class="side-item"><span>1</span><div>Investigação rápida, objetiva e consultiva.</div></div>
+        <div class="side-item"><span>2</span><div>Score, vazamentos e impacto provável ao final.</div></div>
+        <div class="side-item"><span>3</span><div>Recomendação imediata para corrigir a rota.</div></div>
       </div>
     </aside>
 
@@ -676,7 +723,7 @@
                 <small id="statusText">Pronto para iniciar</small>
               </div>
             </div>
-            <div class="time-pill">7 a 10 min</div>
+            <div class="time-pill">3 a 5 min</div>
           </div>
           <div class="progress" aria-label="Progresso do diagnóstico"><span id="progressFill"></span></div>
         </header>
@@ -733,7 +780,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Eu vou conduzir um Mapa de Previsibilidade objetivo da sua operação comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu já tiver te entregado valor.',
+          message: 'Vou criar seu Mapa de Vazamento de Vendas. Minha função é identificar, em poucos minutos, onde sua operação comercial pode estar deixando vendas escaparem antes do fechamento. Primeiro, me diga seu nome, empresa e cargo.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -751,14 +798,14 @@
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem('vamoDiagnosticV2') || 'null');
+        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV1') || 'null');
         if (!saved || saved.report) return;
         Object.assign(state, saved, { busy: false });
       } catch {}
     }
 
     function persistState() {
-      localStorage.setItem('vamoDiagnosticV2', JSON.stringify({
+      localStorage.setItem('vamoSalesLeakMapV1', JSON.stringify({
         diagnosticId: state.diagnosticId,
         question: state.question,
         messages: state.messages,
@@ -853,12 +900,12 @@
         const data = await api('/api/diagnostico/finalize', { diagnostic_id: state.diagnosticId });
         state.report = data.report;
         state.question = null;
-        localStorage.removeItem('vamoDiagnosticV2');
+        localStorage.removeItem('vamoSalesLeakMapV1');
         renderReport(data.report);
       } catch (error) {
         addMessage({
           sender: 'assistant',
-          message: 'Não conseguimos gerar a análise completa agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
+          message: 'Não conseguimos gerar o mapa completo agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
           metadata: { kind: 'error' },
         });
       } finally {
@@ -928,6 +975,7 @@
           <div class="quick-grid">
             ${q.options.map((option) => `<button class="quick-btn" type="button" data-answer="${escapeAttr(option)}">${escapeHtml(option)}</button>`).join('')}
           </div>
+          ${q.helper ? `<div class="question-meta"><span>${escapeHtml(q.helper)}</span><span></span></div>` : ''}
         `;
         els.answerArea.querySelectorAll('[data-answer]').forEach((button) => {
           button.addEventListener('click', () => sendAnswer(button.dataset.answer, 'button'));
@@ -980,8 +1028,9 @@
         correcao_individual: 'Correção individual',
         aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
       };
-      const readingText = encodeURIComponent('Olá, fiz o Mapa de Previsibilidade da VAMO e quero receber uma leitura do meu diagnóstico.');
-      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Previsibilidade da VAMO e quero marcar uma conversa estratégica para entender as primeiras correções.');
+      const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
+      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero receber uma leitura do meu diagnóstico.');
+      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero marcar uma conversa estratégica para entender as primeiras correções.');
       const readingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${readingText}`;
       const meetingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${meetingText}`;
       els.progressFill.style.width = '100%';
@@ -990,7 +1039,7 @@
       els.reportView.classList.add('active');
       els.reportView.innerHTML = `
         <div class="report-head">
-          <h2>Seu dashboard do Mapa de Previsibilidade</h2>
+          <h2>Seu Mapa de Vazamento de Vendas</h2>
           <p>${escapeHtml(shortReportIntro(report))}</p>
         </div>
         <div class="dashboard-grid">
@@ -1001,14 +1050,14 @@
             </div>
             <div>
               <p class="card-label">Leitura da VAMO</p>
-              <p>${executiveSignal(report.score_previsibilidade)}</p>
+              <p>${executiveSignal(score)}</p>
             </div>
           </article>
           <article class="dash-card score-card">
-            <p class="card-label">Score de previsibilidade comercial</p>
-            <div class="score-number">${Number(report.score_previsibilidade || 0)}</div>
+            <p class="card-label">Score de Vendas Previsíveis</p>
+            <div class="score-number">${score}</div>
             <div class="level">${escapeHtml(report.nivel_operacao || '')}</div>
-            <p class="summary">Quanto menor o score, maior a chance de a operação perceber gargalos tarde demais.</p>
+            <p class="summary">Quanto menor o score, maior a chance de vendas escaparem sem correção a tempo.</p>
           </article>
           <article class="dash-card pillars-card">
             <p class="card-label">Radar de maturidade</p>
@@ -1016,7 +1065,7 @@
             ${Object.entries(labels).map(([key, label]) => pillarRow(label, pillars[key] || 0)).join('')}
           </article>
           <article class="dash-card leaks-card">
-            <p class="card-label">Mapa de vazamentos comerciais</p>
+            <p class="card-label">3 principais vazamentos de vendas</p>
             <div class="leak-list">${(report.vazamentos || []).map(leakMarkup).join('')}</div>
           </article>
           <article class="dash-card contradictions-card ${report.contradicoes?.length ? '' : 'hidden'}">
@@ -1024,7 +1073,8 @@
             <div class="contradiction-list">${(report.contradicoes || []).map((item) => `<div class="mini-item"><p>${escapeHtml(item)}</p></div>`).join('')}</div>
           </article>
           <article class="dash-card plan-card">
-            <p class="card-label">Plano de ação em 3 passos</p>
+            <p class="card-label">Recomendação imediata</p>
+            <p class="summary">${escapeHtml(report.recomendacao_imediata || '')}</p>
             <div class="plan-list">${(report.plano_acao || []).map((item, index) => `<div class="mini-item"><div class="mini-title">${index + 1}. ${escapeHtml(item)}</div></div>`).join('')}</div>
           </article>
           <article class="dash-card cta-card">
@@ -1048,7 +1098,7 @@
 
     function executiveSignal(score) {
       const value = Number(score || 0);
-      if (value <= 25) return 'Operação com alto risco de baixa visibilidade comercial.';
+      if (value <= 25) return 'Operação no escuro, com alto risco de vendas escapando.';
       if (value <= 50) return 'Gestão ainda reativa, com correções chegando tarde.';
       if (value <= 70) return 'Há base de gestão, mas a previsibilidade ainda não está consolidada.';
       if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar.';
@@ -1056,7 +1106,7 @@
     }
 
     function shortReportIntro(report) {
-      const score = Number(report.score_previsibilidade || 0);
+      const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
       const level = report.nivel_operacao || 'operação em análise';
       return `Score ${score}/100 · ${level}`;
     }
@@ -1142,10 +1192,10 @@
       return ({
         contexto_comercial: 'Contexto comercial',
         previsibilidade: 'Previsibilidade',
-        vazamento_performance: 'Vazamento de performance',
-        comissao_incentivo: 'Comissão e incentivo',
-        gestao_correcao: 'Gestão e correção',
-        finalizacao: 'Finalização',
+        vazamentos: 'Vazamentos de vendas',
+        incentivo: 'Incentivo comercial',
+        prioridade: 'Prioridade',
+        contato: 'Contato',
       })[blockId] || 'Diagnóstico';
     }
 

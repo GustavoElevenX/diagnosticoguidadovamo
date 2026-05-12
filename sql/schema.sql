@@ -1,4 +1,4 @@
--- VAMO - Mapa de Previsibilidade
+-- VAMO - Mapa de Vazamento de Vendas
 -- Execute este arquivo no SQL Editor do Supabase antes de usar o novo diagnóstico.
 
 create extension if not exists "pgcrypto";
@@ -14,6 +14,7 @@ create table if not exists diagnostics (
   seller_count text,
   sales_channel text,
   sales_model text,
+  diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO',
   current_step text,
   status text default 'started',
   raw_answers jsonb default '{}'::jsonb,
@@ -56,6 +57,9 @@ create table if not exists daily_ai_learning (
   created_at timestamp with time zone default now()
 );
 
+alter table diagnostics
+  add column if not exists diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO';
+
 create table if not exists diagnostic_question_versions (
   id uuid primary key default gen_random_uuid(),
   version_name text not null,
@@ -97,6 +101,7 @@ select
   seller_count,
   sales_channel,
   sales_model,
+  diagnostic_name,
   score_previsibilidade,
   score_fit_vamo,
   maturity_level,
@@ -144,33 +149,19 @@ create policy "question versions service role only"
 
 insert into diagnostic_question_versions (version_name, active, questions)
 select
-  'mapa-previsibilidade-v1',
+  'mapa-vazamento-vendas-v1',
   true,
   '[
-    {"id":"segment","block":"contexto_comercial","type":"button"},
     {"id":"seller_count","block":"contexto_comercial","type":"button"},
-    {"id":"performance_owner","block":"contexto_comercial","type":"button"},
+    {"id":"segment","block":"contexto_comercial","type":"button"},
     {"id":"sales_channel","block":"contexto_comercial","type":"button"},
-    {"id":"sales_model","block":"contexto_comercial","type":"button"},
-    {"id":"forecast_clarity","block":"previsibilidade","type":"button"},
-    {"id":"quota_attainment","block":"previsibilidade","type":"button"},
-    {"id":"tracking_frequency","block":"previsibilidade","type":"button"},
-    {"id":"forecast_difficulty","block":"previsibilidade","type":"text"},
-    {"id":"contact_capture","block":"previsibilidade","type":"contact"},
-    {"id":"main_loss_area","block":"vazamento_performance","type":"button"},
-    {"id":"lead_followup_loss","block":"vazamento_performance","type":"button"},
-    {"id":"underperformance_reason","block":"vazamento_performance","type":"button"},
-    {"id":"thirty_day_fix","block":"vazamento_performance","type":"text"},
-    {"id":"has_commission","block":"comissao_incentivo","type":"button"},
-    {"id":"commission_calculation","block":"comissao_incentivo","type":"button"},
-    {"id":"seller_commission_visibility","block":"comissao_incentivo","type":"button"},
-    {"id":"commission_conflict","block":"comissao_incentivo","type":"button"},
-    {"id":"individual_action_plan","block":"gestao_correcao","type":"button"},
-    {"id":"has_pdi","block":"gestao_correcao","type":"button"},
-    {"id":"manager_correction_data","block":"gestao_correcao","type":"button"},
-    {"id":"urgency","block":"gestao_correcao","type":"button"},
-    {"id":"final_contact_choice","block":"finalizacao","type":"button"}
+    {"id":"predictability_level","block":"previsibilidade","type":"button"},
+    {"id":"main_sales_leak","block":"vazamentos","type":"button"},
+    {"id":"followup_loss","block":"vazamentos","type":"button"},
+    {"id":"incentive_model","block":"incentivo","type":"button"},
+    {"id":"urgency","block":"prioridade","type":"button"},
+    {"id":"contact_capture","block":"contato","type":"contact"}
   ]'::jsonb
 where not exists (
-  select 1 from diagnostic_question_versions where version_name = 'mapa-previsibilidade-v1'
+  select 1 from diagnostic_question_versions where version_name = 'mapa-vazamento-vendas-v1'
 );
