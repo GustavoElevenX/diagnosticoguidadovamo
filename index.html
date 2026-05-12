@@ -70,10 +70,29 @@
       gap: 14px;
     }
 
-    .brand-mark {
-      width: 122px;
-      height: auto;
+    .brand-symbol {
+      width: 54px;
+      height: 42px;
+      object-fit: contain;
       display: block;
+      flex: 0 0 auto;
+    }
+
+    .brand-word {
+      color: var(--text);
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+      margin-left: -4px;
+    }
+
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: auto;
       flex: 0 0 auto;
     }
 
@@ -652,7 +671,8 @@
         gap: 16px;
         overflow: visible;
       }
-      .brand-mark { width: 112px; }
+      .brand-symbol { width: 50px; height: 39px; }
+      .brand-word { font-size: 26px; }
       .side h1 { font-size: clamp(32px, 8vw, 44px); }
       .side p { max-width: 640px; }
       .main {
@@ -672,7 +692,8 @@
       .main { padding: 14px; }
       .side { padding: 22px 18px; }
       .brand { gap: 12px; }
-      .brand-mark { width: 104px; }
+      .brand-symbol { width: 46px; height: 36px; }
+      .brand-word { font-size: 24px; }
       .side h1 {
         font-size: clamp(30px, 10vw, 38px);
         line-height: 1.08;
@@ -701,12 +722,10 @@
   <div class="app-shell">
     <aside class="side">
       <div class="brand">
-        <svg class="brand-mark" viewBox="0 0 152 42" role="img" aria-label="VAMO" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 32h44v6H8z" fill="#00ff6a"/>
-          <path d="M15 29 27 7l12 22H15z" fill="#00ff6a"/>
-          <path d="M35 29 48 3l13 26H35z" fill="#00ff6a"/>
-          <text x="72" y="30" fill="#f6fff8" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="700" letter-spacing="0">VAMO</text>
-        </svg>
+        <div class="brand-lockup" aria-label="VAMO">
+          <img class="brand-symbol" src="imagens/vamo-logo-cropped.png" alt="" loading="eager" decoding="sync" />
+          <span class="brand-word">VAMO</span>
+        </div>
         <div class="brand-badge">IA Comercial</div>
       </div>
       <h1>Mapa de Vazamento de Vendas VAMO</h1>
