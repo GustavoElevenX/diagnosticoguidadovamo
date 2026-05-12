@@ -70,10 +70,15 @@
       gap: 14px;
     }
 
-    .brand img {
-      width: 86px;
-      height: auto;
-      display: block;
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      color: var(--text);
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0;
+      white-space: nowrap;
     }
 
     .brand-badge {
@@ -651,7 +656,7 @@
         gap: 16px;
         overflow: visible;
       }
-      .brand img { width: 72px; }
+      .brand-logo { font-size: 28px; }
       .side h1 { font-size: clamp(32px, 8vw, 44px); }
       .side p { max-width: 640px; }
       .main {
@@ -671,7 +676,7 @@
       .main { padding: 14px; }
       .side { padding: 22px 18px; }
       .brand { gap: 12px; }
-      .brand img { width: 64px; }
+      .brand-logo { font-size: 26px; }
       .side h1 {
         font-size: clamp(30px, 10vw, 38px);
         line-height: 1.08;
@@ -700,7 +705,7 @@
   <div class="app-shell">
     <aside class="side">
       <div class="brand">
-        <img src="/imagens/logo-vamo.png" alt="VAMO" loading="eager" />
+        <div class="brand-logo" aria-label="VAMO">VAMO</div>
         <div class="brand-badge">IA Comercial</div>
       </div>
       <h1>Mapa de Vazamento de Vendas VAMO</h1>
