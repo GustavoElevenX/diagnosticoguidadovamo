@@ -839,7 +839,7 @@
       } catch (error) {
         addMessage({
           sender: 'assistant',
-          message: `Nao consegui salvar essa resposta agora: ${error.message}`,
+          message: `Não consegui salvar essa resposta agora: ${error.message}`,
           metadata: { kind: 'error' },
         });
       } finally {
@@ -858,7 +858,7 @@
       } catch (error) {
         addMessage({
           sender: 'assistant',
-          message: 'Nao conseguimos gerar a analise completa agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
+          message: 'Não conseguimos gerar a análise completa agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
           metadata: { kind: 'error' },
         });
       } finally {
@@ -911,7 +911,7 @@
 
     function renderAnswerArea() {
       if (!state.question) {
-        els.answerArea.innerHTML = state.busy ? loadingMarkup('Gerando seu relatorio visual...') : '';
+        els.answerArea.innerHTML = state.busy ? loadingMarkup('Gerando seu relatório visual...') : '';
         return;
       }
       if (state.busy) {
@@ -973,10 +973,10 @@
       const pillars = report.scores_pilares || {};
       const labels = {
         previsibilidade_meta: 'Previsibilidade de meta',
-        gestao_performance: 'Gestao de performance',
+        gestao_performance: 'Gestão de performance',
         comissao_incentivo: 'Comissão e incentivo',
         rotina_acompanhamento: 'Rotina de acompanhamento',
-        correcao_individual: 'Correcao individual',
+        correcao_individual: 'Correção individual',
         aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
       };
       const whatsappText = encodeURIComponent(`Olá, fiz o Raio-X Comercial da VAMO. Meu score foi ${report.score_previsibilidade} e quero entender os principais vazamentos da minha operação.`);
@@ -1029,7 +1029,7 @@
             <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
             <div class="cta-actions">
               <a href="${whatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
-              <a href="${whatsappUrl}" target="_blank" rel="noopener">Agendar conversa estrategica</a>
+              <a href="${whatsappUrl}" target="_blank" rel="noopener">Agendar conversa estratégica</a>
               <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnóstico</button>
             </div>
           </article>
@@ -1110,7 +1110,7 @@
             <span class="priority ${escapeAttr(priority)}">${escapeHtml(priority)}</span>
           </div>
           <p>${escapeHtml(leak.explicacao || '')}</p>
-          <p><strong>Impacto provavel:</strong> ${escapeHtml(leak.impacto || '')}</p>
+          <p><strong>Impacto provável:</strong> ${escapeHtml(leak.impacto || '')}</p>
         </div>
       `;
     }

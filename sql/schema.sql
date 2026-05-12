@@ -1,5 +1,5 @@
 -- VAMO - Raio-X de Vazamento Comercial V2
--- Execute este arquivo no SQL Editor do Supabase antes de usar o novo diagnostico.
+-- Execute este arquivo no SQL Editor do Supabase antes de usar o novo diagnóstico.
 
 create extension if not exists "pgcrypto";
 
@@ -147,6 +147,7 @@ select
   'raio-x-v2',
   true,
   '[
+    {"id":"segment","block":"contexto_comercial","type":"button"},
     {"id":"seller_count","block":"contexto_comercial","type":"button"},
     {"id":"performance_owner","block":"contexto_comercial","type":"button"},
     {"id":"sales_channel","block":"contexto_comercial","type":"button"},

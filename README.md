@@ -39,3 +39,5 @@ npm run dev
 O projeto inclui `netlify/functions/scheduled-daily-learning.mjs`, agendado para rodar diariamente às `09:00 UTC`.
 
 Também é possível acionar manualmente via `POST /api/internal/daily-learning` usando `INTERNAL_CRON_SECRET`.
+
+Em produção, `INTERNAL_CRON_SECRET` é obrigatório. Sem essa variável, a rotina falha fechada para evitar execução pública sem validação.
