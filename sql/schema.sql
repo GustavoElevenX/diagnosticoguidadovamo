@@ -1,4 +1,4 @@
--- VAMO - Raio-X de Vazamento Comercial V2
+-- VAMO - Mapa de Previsibilidade
 -- Execute este arquivo no SQL Editor do Supabase antes de usar o novo diagnóstico.
 
 create extension if not exists "pgcrypto";
@@ -144,7 +144,7 @@ create policy "question versions service role only"
 
 insert into diagnostic_question_versions (version_name, active, questions)
 select
-  'raio-x-v2',
+  'mapa-previsibilidade-v1',
   true,
   '[
     {"id":"segment","block":"contexto_comercial","type":"button"},
@@ -172,5 +172,5 @@ select
     {"id":"final_contact_choice","block":"finalizacao","type":"button"}
   ]'::jsonb
 where not exists (
-  select 1 from diagnostic_question_versions where version_name = 'raio-x-v2'
+  select 1 from diagnostic_question_versions where version_name = 'mapa-previsibilidade-v1'
 );

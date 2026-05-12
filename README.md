@@ -1,4 +1,4 @@
-# Raio-X de Vazamento Comercial VAMO
+# Mapa de Previsibilidade VAMO
 
 Diagnóstico guiado comercial da VAMO em formato de micro-app estático com APIs server-side em Express e Netlify Functions.
 

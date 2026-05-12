@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raio-X de Vazamento Comercial VAMO</title>
+  <title>Mapa de Previsibilidade VAMO</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -656,7 +656,7 @@
         <img src="imagens/Logo alta qualidade.png" alt="VAMO" />
         <div class="brand-badge">IA Comercial</div>
       </div>
-      <h1>Raio-X de Vazamento Comercial VAMO</h1>
+      <h1>Mapa de Previsibilidade VAMO</h1>
       <p>Uma inteligência comercial criada para identificar onde sua operação perde previsibilidade, performance e dinheiro depois que o lead chega.</p>
       <div class="side-list">
         <div class="side-item"><span>1</span><div>Conversa guiada, sem virar um formulário comum.</div></div>
@@ -690,7 +690,7 @@
             <input id="leadName" type="text" autocomplete="name" placeholder="Seu nome" />
             <input id="companyName" type="text" autocomplete="organization" placeholder="Empresa" />
             <input id="role" type="text" autocomplete="organization-title" placeholder="Cargo" />
-            <button class="primary-btn" id="startBtn" type="button">Iniciar Raio-X</button>
+            <button class="primary-btn" id="startBtn" type="button">Iniciar Mapa</button>
             <div class="error" id="errorBox"></div>
           </div>
           <div id="answerArea" class="hidden"></div>
@@ -733,7 +733,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Eu vou conduzir um diagnóstico objetivo da sua operação comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu já tiver te entregado valor.',
+          message: 'Eu vou conduzir um Mapa de Previsibilidade objetivo da sua operação comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu já tiver te entregado valor.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -980,15 +980,17 @@
         correcao_individual: 'Correção individual',
         aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
       };
-      const whatsappText = encodeURIComponent(`Olá, fiz o Raio-X Comercial da VAMO. Meu score foi ${report.score_previsibilidade} e quero entender os principais vazamentos da minha operação.`);
-      const whatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${whatsappText}`;
+      const readingText = encodeURIComponent('Olá, fiz o Mapa de Previsibilidade da VAMO e quero receber uma leitura do meu diagnóstico.');
+      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Previsibilidade da VAMO e quero marcar uma conversa estratégica para entender as primeiras correções.');
+      const readingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${readingText}`;
+      const meetingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${meetingText}`;
       els.progressFill.style.width = '100%';
       els.composer.classList.add('hidden');
       els.chatScroll.classList.add('hidden');
       els.reportView.classList.add('active');
       els.reportView.innerHTML = `
         <div class="report-head">
-          <h2>Seu dashboard do Raio-X Comercial</h2>
+          <h2>Seu dashboard do Mapa de Previsibilidade</h2>
           <p>${escapeHtml(shortReportIntro(report))}</p>
         </div>
         <div class="dashboard-grid">
@@ -1029,8 +1031,8 @@
             <p class="card-label">Próximo passo</p>
             <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
             <div class="cta-actions">
-              <a href="${whatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
-              <a href="${whatsappUrl}" target="_blank" rel="noopener">Agendar conversa estratégica</a>
+              <a href="${readingWhatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
+              <a href="${meetingWhatsappUrl}" target="_blank" rel="noopener">Agendar conversa estratégica</a>
               <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnóstico</button>
             </div>
           </article>
