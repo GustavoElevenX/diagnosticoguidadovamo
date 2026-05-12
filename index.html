@@ -454,6 +454,7 @@
 
     .score-card { grid-column: span 4; }
     .pillars-card { grid-column: span 8; }
+    .executive-card { grid-column: span 12; }
     .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 6; }
 
     .card-label {
@@ -482,6 +483,36 @@
       color: var(--muted);
       line-height: 1.55;
       margin: 12px 0 0;
+    }
+
+    .executive-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(220px, .8fr);
+      gap: 18px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(0, 255, 106, .14), rgba(121, 184, 255, .08));
+      border-color: rgba(0, 255, 106, .28);
+    }
+
+    .executive-card p:last-child {
+      margin: 0;
+      color: var(--soft);
+      font-size: 18px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .radar-wrap {
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+    }
+
+    .radar-wrap canvas {
+      width: 100% !important;
+      max-width: 360px;
+      height: 260px !important;
     }
 
     .pillar-row {
@@ -520,6 +551,17 @@
       background: #080a09;
       border-radius: 10px;
       padding: 13px;
+    }
+
+    .mini-item.risk-alta {
+      border-color: rgba(255, 104, 104, .45);
+      background: linear-gradient(135deg, rgba(255, 104, 104, .13), rgba(8, 10, 9, 1));
+    }
+
+    .mini-item.risk-média,
+    .mini-item.risk-media {
+      border-color: rgba(255, 189, 90, .45);
+      background: linear-gradient(135deg, rgba(255, 189, 90, .12), rgba(8, 10, 9, 1));
     }
 
     .mini-title {
@@ -599,6 +641,7 @@
       .msg { max-width: 94%; }
       .dashboard-grid { grid-template-columns: 1fr; }
       .score-card, .pillars-card, .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 1; }
+      .executive-card { grid-column: span 1; grid-template-columns: 1fr; }
       .pillar-row { grid-template-columns: 1fr 42px; }
       .pillar-row .bar-track { grid-column: 1 / -1; grid-row: 2; }
       .topline { align-items: flex-start; }
@@ -614,11 +657,11 @@
         <div class="brand-badge">IA Comercial</div>
       </div>
       <h1>Raio-X de Vazamento Comercial VAMO</h1>
-      <p>Uma inteligencia comercial criada para identificar onde sua operacao perde previsibilidade, performance e dinheiro depois que o lead chega.</p>
+      <p>Uma inteligência comercial criada para identificar onde sua operação perde previsibilidade, performance e dinheiro depois que o lead chega.</p>
       <div class="side-list">
-        <div class="side-item"><span>1</span><div>Conversa guiada, sem virar um formulario comum.</div></div>
-        <div class="side-item"><span>2</span><div>Scores, vazamentos e contradicoes ao final.</div></div>
-        <div class="side-item"><span>3</span><div>Plano de acao em 3 passos para corrigir a rota.</div></div>
+        <div class="side-item"><span>1</span><div>Conversa guiada, sem virar um formulário comum.</div></div>
+        <div class="side-item"><span>2</span><div>Scores, vazamentos e contradições ao final.</div></div>
+        <div class="side-item"><span>3</span><div>Plano de ação em 3 passos para corrigir a rota.</div></div>
       </div>
     </aside>
 
@@ -635,7 +678,7 @@
             </div>
             <div class="time-pill">7 a 10 min</div>
           </div>
-          <div class="progress" aria-label="Progresso do diagnostico"><span id="progressFill"></span></div>
+          <div class="progress" aria-label="Progresso do diagnóstico"><span id="progressFill"></span></div>
         </header>
 
         <div class="chat-scroll" id="chatScroll"></div>
@@ -643,7 +686,7 @@
 
         <footer class="composer" id="composer">
           <div class="lead-form" id="leadForm">
-            <div class="question-meta"><span>Inicio</span><span>Pedimos so o essencial agora</span></div>
+            <div class="question-meta"><span>Início</span><span>Pedimos só o essencial agora</span></div>
             <input id="leadName" type="text" autocomplete="name" placeholder="Seu nome" />
             <input id="companyName" type="text" autocomplete="organization" placeholder="Empresa" />
             <input id="role" type="text" autocomplete="organization-title" placeholder="Cargo" />
@@ -667,6 +710,8 @@
       busy: false,
     };
 
+    let radarChartInstance = null;
+
     const els = {
       chatScroll: document.getElementById('chatScroll'),
       reportView: document.getElementById('reportView'),
@@ -688,7 +733,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Eu vou conduzir um diagnostico objetivo da sua operacao comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu ja tiver te entregado valor.',
+          message: 'Eu vou conduzir um diagnóstico objetivo da sua operação comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu já tiver te entregado valor.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -725,7 +770,7 @@
 
     function setBusy(isBusy, text = 'Processando...') {
       state.busy = isBusy;
-      els.statusText.textContent = isBusy ? text : (state.question ? `Etapa ${state.question.position} de ${state.question.total}` : 'Diagnostico finalizado');
+      els.statusText.textContent = isBusy ? text : (state.question ? `Etapa ${state.question.position} de ${state.question.total}` : 'Diagnóstico finalizado');
       renderAnswerArea();
     }
 
@@ -749,7 +794,7 @@
         return;
       }
 
-      setBusy(true, 'Criando diagnostico...');
+      setBusy(true, 'Criando diagnóstico...');
       try {
         const data = await api('/api/diagnostico/start', { lead_name, company_name, role });
         state.diagnosticId = data.diagnostic_id;
@@ -870,7 +915,7 @@
         return;
       }
       if (state.busy) {
-        els.answerArea.innerHTML = loadingMarkup('Lendo o contexto e salvando no diagnostico...');
+        els.answerArea.innerHTML = loadingMarkup('Lendo o contexto e salvando no diagnóstico...');
         return;
       }
 
@@ -929,12 +974,12 @@
       const labels = {
         previsibilidade_meta: 'Previsibilidade de meta',
         gestao_performance: 'Gestao de performance',
-        comissao_incentivo: 'Comissao e incentivo',
+        comissao_incentivo: 'Comissão e incentivo',
         rotina_acompanhamento: 'Rotina de acompanhamento',
         correcao_individual: 'Correcao individual',
         aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
       };
-      const whatsappText = encodeURIComponent(`Ola, fiz o Raio-X Comercial da VAMO. Meu score foi ${report.score_previsibilidade} e quero entender os principais vazamentos da minha operacao.`);
+      const whatsappText = encodeURIComponent(`Olá, fiz o Raio-X Comercial da VAMO. Meu score foi ${report.score_previsibilidade} e quero entender os principais vazamentos da minha operação.`);
       const whatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${whatsappText}`;
       els.progressFill.style.width = '100%';
       els.composer.classList.add('hidden');
@@ -946,14 +991,25 @@
           <p>${escapeHtml(report.resumo_executivo || '')}</p>
         </div>
         <div class="dashboard-grid">
+          <article class="dash-card executive-card">
+            <div>
+              <p class="card-label">Resumo executivo</p>
+              <p>${escapeHtml(report.resumo_executivo || '')}</p>
+            </div>
+            <div>
+              <p class="card-label">Leitura da VAMO</p>
+              <p>${executiveSignal(report.score_previsibilidade)}</p>
+            </div>
+          </article>
           <article class="dash-card score-card">
             <p class="card-label">Score de previsibilidade comercial</p>
             <div class="score-number">${Number(report.score_previsibilidade || 0)}</div>
             <div class="level">${escapeHtml(report.nivel_operacao || '')}</div>
-            <p class="summary">Score interno de fit VAMO: ${Number(report.fit_vamo_score || 0)}. Recomendacao: ${escapeHtml(report.recomendacao_comercial || '')}.</p>
+            <p class="summary">Quanto menor o score, maior a chance de a operação perceber gargalos tarde demais.</p>
           </article>
           <article class="dash-card pillars-card">
             <p class="card-label">Radar de maturidade</p>
+            <div class="radar-wrap"><canvas id="pillarRadar"></canvas></div>
             ${Object.entries(labels).map(([key, label]) => pillarRow(label, pillars[key] || 0)).join('')}
           </article>
           <article class="dash-card leaks-card">
@@ -961,20 +1017,20 @@
             <div class="leak-list">${(report.vazamentos || []).map(leakMarkup).join('')}</div>
           </article>
           <article class="dash-card contradictions-card ${report.contradicoes?.length ? '' : 'hidden'}">
-            <p class="card-label">Contradicoes identificadas</p>
+            <p class="card-label">Contradições identificadas</p>
             <div class="contradiction-list">${(report.contradicoes || []).map((item) => `<div class="mini-item"><p>${escapeHtml(item)}</p></div>`).join('')}</div>
           </article>
           <article class="dash-card plan-card">
-            <p class="card-label">Plano de acao em 3 passos</p>
+            <p class="card-label">Plano de ação em 3 passos</p>
             <div class="plan-list">${(report.plano_acao || []).map((item, index) => `<div class="mini-item"><div class="mini-title">${index + 1}. ${escapeHtml(item)}</div></div>`).join('')}</div>
           </article>
           <article class="dash-card cta-card">
-            <p class="card-label">Proximo passo</p>
+            <p class="card-label">Próximo passo</p>
             <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
             <div class="cta-actions">
               <a href="${whatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
               <a href="${whatsappUrl}" target="_blank" rel="noopener">Agendar conversa estrategica</a>
-              <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnostico</button>
+              <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnóstico</button>
             </div>
           </article>
         </div>
@@ -983,6 +1039,54 @@
         document.querySelectorAll('.bar-fill').forEach((bar) => {
           bar.style.width = `${bar.dataset.value}%`;
         });
+        renderRadarChart(pillars, labels);
+      });
+    }
+
+    function executiveSignal(score) {
+      const value = Number(score || 0);
+      if (value <= 25) return 'Operação com alto risco de baixa visibilidade comercial.';
+      if (value <= 50) return 'Gestão ainda reativa, com correções chegando tarde.';
+      if (value <= 70) return 'Há base de gestão, mas a previsibilidade ainda não está consolidada.';
+      if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar.';
+      return 'Operação com boa maturidade para escala comercial.';
+    }
+
+    function renderRadarChart(pillars, labels) {
+      const canvas = document.getElementById('pillarRadar');
+      if (!canvas || typeof Chart === 'undefined') return;
+      if (radarChartInstance) radarChartInstance.destroy();
+
+      const keys = Object.keys(labels);
+      radarChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'radar',
+        data: {
+          labels: keys.map((key) => labels[key]),
+          datasets: [{
+            data: keys.map((key) => Number(pillars[key] || 0)),
+            backgroundColor: 'rgba(0,255,106,.16)',
+            borderColor: '#00ff6a',
+            pointBackgroundColor: '#00ff6a',
+            pointBorderColor: '#061109',
+            pointRadius: 4,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: { display: false, stepSize: 20 },
+              grid: { color: 'rgba(154,168,160,.18)' },
+              angleLines: { color: 'rgba(154,168,160,.18)' },
+              pointLabels: { color: '#d9e6dd', font: { size: 11, weight: '700' } },
+            },
+          },
+          plugins: { legend: { display: false } },
+        },
       });
     }
 
@@ -1000,7 +1104,7 @@
     function leakMarkup(leak) {
       const priority = String(leak.prioridade || 'baixa').toLowerCase();
       return `
-        <div class="mini-item">
+        <div class="mini-item risk-${escapeAttr(priority)}">
           <div class="mini-title">
             <span>${escapeHtml(leak.titulo || '')}</span>
             <span class="priority ${escapeAttr(priority)}">${escapeHtml(priority)}</span>
@@ -1030,10 +1134,10 @@
         contexto_comercial: 'Contexto comercial',
         previsibilidade: 'Previsibilidade',
         vazamento_performance: 'Vazamento de performance',
-        comissao_incentivo: 'Comissao e incentivo',
-        gestao_correcao: 'Gestao e correcao',
-        finalizacao: 'Finalizacao',
-      })[blockId] || 'Diagnostico';
+        comissao_incentivo: 'Comissão e incentivo',
+        gestao_correcao: 'Gestão e correção',
+        finalizacao: 'Finalização',
+      })[blockId] || 'Diagnóstico';
     }
 
     function escapeHtml(value) {
