@@ -1,0 +1,36 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/diagnostico/start"
+  to = "/.netlify/functions/diagnostic-start"
+  status = 200
+
+[[redirects]]
+  from = "/api/config"
+  to = "/.netlify/functions/config"
+  status = 200
+
+[[redirects]]
+  from = "/api/diagnostico/message"
+  to = "/.netlify/functions/diagnostic-message"
+  status = 200
+
+[[redirects]]
+  from = "/api/diagnostico/finalize"
+  to = "/.netlify/functions/diagnostic-finalize"
+  status = 200
+
+[[redirects]]
+  from = "/api/diagnostico/:id/report"
+  to = "/.netlify/functions/diagnostic-report?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/internal/daily-learning"
+  to = "/.netlify/functions/daily-learning"
+  status = 200

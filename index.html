@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raio-X de Vazamento Comercial VAMO</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #080908;
+      --panel: #101312;
+      --panel-2: #151a18;
+      --line: #26302b;
+      --text: #f6fff8;
+      --muted: #9aa8a0;
+      --soft: #d9e6dd;
+      --green: #00ff6a;
+      --green-2: #6dff9d;
+      --green-soft: rgba(0, 255, 106, .13);
+      --amber: #ffbd5a;
+      --red: #ff6868;
+      --blue: #79b8ff;
+      --radius: 12px;
+      --shadow: 0 18px 60px rgba(0, 0, 0, .34);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0, 255, 106, .08), transparent 32rem),
+        linear-gradient(180deg, #0b0d0c 0%, var(--bg) 46%, #050605 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+    }
+
+    .side {
+      min-height: 100vh;
+      padding: 32px;
+      border-right: 1px solid var(--line);
+      background: rgba(10, 12, 11, .78);
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand img {
+      width: 92px;
+      height: auto;
+      display: block;
+    }
+
+    .brand-badge {
+      border: 1px solid rgba(0, 255, 106, .28);
+      color: var(--green);
+      background: var(--green-soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .side h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .side p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 24px;
+    }
+
+    .side-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .side-item span {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 28px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .chat-panel {
+      width: min(100%, 920px);
+      min-height: calc(100vh - 56px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(16, 19, 18, .9);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .topbar {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+      background: rgba(14, 17, 16, .92);
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .assistant-id {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--green), #aaffbf);
+      color: #061109;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .assistant-id strong {
+      display: block;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .assistant-id small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .time-pill {
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid rgba(0, 255, 106, .22);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .progress {
+      height: 6px;
+      background: #080a09;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .chat-scroll {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .msg {
+      max-width: min(76%, 680px);
+      display: grid;
+      gap: 7px;
+      animation: rise .22s ease;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.assistant { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+
+    .bubble {
+      border-radius: 16px;
+      padding: 14px 16px;
+      line-height: 1.55;
+      font-size: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .assistant .bubble {
+      background: #0b0e0d;
+      border: 1px solid var(--line);
+      color: var(--soft);
+      border-top-left-radius: 6px;
+    }
+
+    .user .bubble {
+      background: var(--green);
+      color: #041009;
+      font-weight: 750;
+      border-top-right-radius: 6px;
+    }
+
+    .insight .bubble {
+      background: linear-gradient(135deg, rgba(0, 255, 106, .16), rgba(121, 184, 255, .11));
+      border: 1px solid rgba(0, 255, 106, .3);
+      color: #e8fff0;
+    }
+
+    .composer {
+      padding: 18px 22px 22px;
+      border-top: 1px solid var(--line);
+      background: rgba(14, 17, 16, .96);
+      display: grid;
+      gap: 12px;
+    }
+
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quick-btn, .primary-btn, .ghost-btn {
+      min-height: 46px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .quick-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      color: var(--soft);
+      background: #0a0d0c;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .quick-btn:hover, .ghost-btn:hover {
+      border-color: rgba(0, 255, 106, .45);
+      background: rgba(0, 255, 106, .08);
+    }
+
+    .quick-btn:active, .primary-btn:active, .ghost-btn:active { transform: scale(.985); }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #070908;
+      color: var(--text);
+      outline: 0;
+      padding: 13px 14px;
+      min-height: 46px;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px var(--green-soft);
+    }
+
+    .primary-btn {
+      background: var(--green);
+      color: #041009;
+      border-color: var(--green);
+      font-weight: 900;
+      padding: 0 18px;
+      white-space: nowrap;
+    }
+
+    .ghost-btn {
+      background: transparent;
+      color: var(--muted);
+      padding: 0 14px;
+      font-weight: 750;
+    }
+
+    .lead-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .lead-form .primary-btn { width: 100%; }
+
+    .error {
+      display: none;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 104, 104, .35);
+      background: rgba(255, 104, 104, .08);
+      color: #ffb1b1;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(.7); opacity: .5; }
+      50% { transform: scale(1); opacity: 1; }
+    }
+
+    .report {
+      display: none;
+      padding: 24px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .report.active { display: block; }
+
+    .report-head {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .report-head h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.05;
+    }
+
+    .report-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .dash-card {
+      background: #0d100f;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .score-card { grid-column: span 4; }
+    .pillars-card { grid-column: span 8; }
+    .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 6; }
+
+    .card-label {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .score-number {
+      font-size: clamp(56px, 9vw, 84px);
+      line-height: .9;
+      font-weight: 950;
+      color: var(--green);
+    }
+
+    .level {
+      margin-top: 10px;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .summary {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 12px 0 0;
+    }
+
+    .pillar-row {
+      display: grid;
+      grid-template-columns: minmax(145px, 220px) 1fr 40px;
+      gap: 10px;
+      align-items: center;
+      margin: 11px 0;
+      font-size: 13px;
+      color: var(--soft);
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #060807;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--red), var(--amber), var(--green));
+      transition: width .8s ease;
+    }
+
+    .leak-list, .plan-list, .contradiction-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-item {
+      border: 1px solid var(--line);
+      background: #080a09;
+      border-radius: 10px;
+      padding: 13px;
+    }
+
+    .mini-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .priority {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #061109;
+      background: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .priority.alta { background: var(--red); }
+    .priority.media { background: var(--amber); }
+
+    .mini-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .cta-actions a, .cta-actions button {
+      min-height: 44px;
+      border-radius: 10px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .cta-actions a {
+      background: var(--green);
+      color: #041009;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .side {
+        min-height: auto;
+        position: relative;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .side-list { margin-top: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .chat-panel { min-height: 760px; }
+    }
+
+    @media (max-width: 720px) {
+      .main { padding: 14px; }
+      .side { padding: 22px 18px; }
+      .side-list { grid-template-columns: 1fr; }
+      .chat-panel {
+        min-height: calc(100vh - 28px);
+        border-radius: 14px;
+      }
+      .quick-grid, .input-grid, .input-row { grid-template-columns: 1fr; }
+      .msg { max-width: 94%; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .score-card, .pillars-card, .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 1; }
+      .pillar-row { grid-template-columns: 1fr 42px; }
+      .pillar-row .bar-track { grid-column: 1 / -1; grid-row: 2; }
+      .topline { align-items: flex-start; }
+      .time-pill { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side">
+      <div class="brand">
+        <img src="imagens/Logo alta qualidade.png" alt="VAMO" />
+        <div class="brand-badge">IA Comercial</div>
+      </div>
+      <h1>Raio-X de Vazamento Comercial VAMO</h1>
+      <p>Uma inteligencia comercial criada para identificar onde sua operacao perde previsibilidade, performance e dinheiro depois que o lead chega.</p>
+      <div class="side-list">
+        <div class="side-item"><span>1</span><div>Conversa guiada, sem virar um formulario comum.</div></div>
+        <div class="side-item"><span>2</span><div>Scores, vazamentos e contradicoes ao final.</div></div>
+        <div class="side-item"><span>3</span><div>Plano de acao em 3 passos para corrigir a rota.</div></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="chat-panel" id="chatPanel">
+        <header class="topbar">
+          <div class="topline">
+            <div class="assistant-id">
+              <div class="avatar">V</div>
+              <div>
+                <strong>IA de Performance Comercial VAMO</strong>
+                <small id="statusText">Pronto para iniciar</small>
+              </div>
+            </div>
+            <div class="time-pill">7 a 10 min</div>
+          </div>
+          <div class="progress" aria-label="Progresso do diagnostico"><span id="progressFill"></span></div>
+        </header>
+
+        <div class="chat-scroll" id="chatScroll"></div>
+        <section class="report" id="reportView"></section>
+
+        <footer class="composer" id="composer">
+          <div class="lead-form" id="leadForm">
+            <div class="question-meta"><span>Inicio</span><span>Pedimos so o essencial agora</span></div>
+            <input id="leadName" type="text" autocomplete="name" placeholder="Seu nome" />
+            <input id="companyName" type="text" autocomplete="organization" placeholder="Empresa" />
+            <input id="role" type="text" autocomplete="organization-title" placeholder="Cargo" />
+            <button class="primary-btn" id="startBtn" type="button">Iniciar Raio-X</button>
+            <div class="error" id="errorBox"></div>
+          </div>
+          <div id="answerArea" class="hidden"></div>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      diagnosticId: null,
+      question: null,
+      messages: [],
+      report: null,
+      lead: {},
+      whatsappNumber: '5598992302212',
+      busy: false,
+    };
+
+    const els = {
+      chatScroll: document.getElementById('chatScroll'),
+      reportView: document.getElementById('reportView'),
+      composer: document.getElementById('composer'),
+      leadForm: document.getElementById('leadForm'),
+      answerArea: document.getElementById('answerArea'),
+      progressFill: document.getElementById('progressFill'),
+      statusText: document.getElementById('statusText'),
+      errorBox: document.getElementById('errorBox'),
+      startBtn: document.getElementById('startBtn'),
+    };
+
+    init();
+
+    async function init() {
+      await loadConfig();
+      restoreState();
+      els.startBtn.addEventListener('click', startDiagnostic);
+      if (!state.messages.length) {
+        addMessage({
+          sender: 'assistant',
+          message: 'Eu vou conduzir um diagnostico objetivo da sua operacao comercial. Primeiro, me diga nome, empresa e cargo. O WhatsApp fica para depois que eu ja tiver te entregado valor.',
+          metadata: { kind: 'intro' },
+        }, false);
+      }
+      render();
+    }
+
+    async function loadConfig() {
+      try {
+        const res = await fetch('/api/config');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.whatsappNumber) state.whatsappNumber = data.whatsappNumber.replace(/\D/g, '');
+      } catch {}
+    }
+
+    function restoreState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('vamoDiagnosticV2') || 'null');
+        if (!saved || saved.report) return;
+        Object.assign(state, saved, { busy: false });
+      } catch {}
+    }
+
+    function persistState() {
+      localStorage.setItem('vamoDiagnosticV2', JSON.stringify({
+        diagnosticId: state.diagnosticId,
+        question: state.question,
+        messages: state.messages,
+        report: state.report,
+        lead: state.lead,
+        whatsappNumber: state.whatsappNumber,
+      }));
+    }
+
+    function setBusy(isBusy, text = 'Processando...') {
+      state.busy = isBusy;
+      els.statusText.textContent = isBusy ? text : (state.question ? `Etapa ${state.question.position} de ${state.question.total}` : 'Diagnostico finalizado');
+      renderAnswerArea();
+    }
+
+    function showError(message) {
+      els.errorBox.textContent = message;
+      els.errorBox.style.display = 'block';
+    }
+
+    function clearError() {
+      els.errorBox.style.display = 'none';
+      els.errorBox.textContent = '';
+    }
+
+    async function startDiagnostic() {
+      clearError();
+      const lead_name = document.getElementById('leadName').value.trim();
+      const company_name = document.getElementById('companyName').value.trim();
+      const role = document.getElementById('role').value.trim();
+      if (!lead_name || !company_name || !role) {
+        showError('Preencha nome, empresa e cargo para iniciar.');
+        return;
+      }
+
+      setBusy(true, 'Criando diagnostico...');
+      try {
+        const data = await api('/api/diagnostico/start', { lead_name, company_name, role });
+        state.diagnosticId = data.diagnostic_id;
+        state.question = data.question;
+        state.lead = { lead_name, company_name, role };
+        state.messages = data.messages || [];
+        els.leadForm.classList.add('hidden');
+        els.answerArea.classList.remove('hidden');
+        persistState();
+        render();
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function sendAnswer(answer, answerType) {
+      if (!state.question || state.busy) return;
+      const text = answerToText(answer);
+      if (!text.trim()) return;
+
+      addMessage({ sender: 'user', message: text, metadata: { answer } });
+      setBusy(true, 'Analisando resposta...');
+
+      try {
+        const data = await api('/api/diagnostico/message', {
+          diagnostic_id: state.diagnosticId,
+          step: state.question.id,
+          answer,
+          answer_type: answerType,
+        });
+
+        (data.assistant_messages || []).forEach((message) => addMessage(message, false));
+        state.question = data.question || null;
+        persistState();
+        render();
+
+        if (data.complete) {
+          await finalizeDiagnostic();
+        }
+      } catch (error) {
+        addMessage({
+          sender: 'assistant',
+          message: `Nao consegui salvar essa resposta agora: ${error.message}`,
+          metadata: { kind: 'error' },
+        });
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function finalizeDiagnostic() {
+      setBusy(true, 'Gerando dashboard final...');
+      try {
+        const data = await api('/api/diagnostico/finalize', { diagnostic_id: state.diagnosticId });
+        state.report = data.report;
+        state.question = null;
+        localStorage.removeItem('vamoDiagnosticV2');
+        renderReport(data.report);
+      } catch (error) {
+        addMessage({
+          sender: 'assistant',
+          message: 'Nao conseguimos gerar a analise completa agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
+          metadata: { kind: 'error' },
+        });
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function api(url, body) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+      return data;
+    }
+
+    function addMessage(message, persist = true) {
+      state.messages.push(message);
+      if (persist) persistState();
+      renderMessages();
+    }
+
+    function render() {
+      els.leadForm.classList.toggle('hidden', Boolean(state.diagnosticId));
+      els.answerArea.classList.toggle('hidden', !state.diagnosticId || Boolean(state.report));
+      els.chatScroll.classList.toggle('hidden', Boolean(state.report));
+      els.reportView.classList.toggle('active', Boolean(state.report));
+      els.progressFill.style.width = `${state.report ? 100 : state.question?.progress || 0}%`;
+      els.statusText.textContent = state.question ? `Etapa ${state.question.position} de ${state.question.total}` : 'Pronto para iniciar';
+      renderMessages();
+      renderAnswerArea();
+      if (state.report) renderReport(state.report);
+    }
+
+    function renderMessages() {
+      els.chatScroll.innerHTML = state.messages.map((message) => {
+        const kind = message.metadata?.kind === 'insight' ? ' insight' : '';
+        return `
+          <div class="msg ${message.sender}${kind}">
+            <div class="bubble">${escapeHtml(message.message)}</div>
+          </div>
+        `;
+      }).join('');
+      requestAnimationFrame(() => {
+        els.chatScroll.scrollTop = els.chatScroll.scrollHeight;
+      });
+    }
+
+    function renderAnswerArea() {
+      if (!state.question) {
+        els.answerArea.innerHTML = state.busy ? loadingMarkup('Gerando seu relatorio visual...') : '';
+        return;
+      }
+      if (state.busy) {
+        els.answerArea.innerHTML = loadingMarkup('Lendo o contexto e salvando no diagnostico...');
+        return;
+      }
+
+      const q = state.question;
+      const meta = `<div class="question-meta"><span>${escapeHtml(blockLabel(q.blockId))}</span><span>${q.estimatedTime}</span></div>`;
+
+      if (q.type === 'button') {
+        els.answerArea.innerHTML = `
+          ${meta}
+          <div class="quick-grid">
+            ${q.options.map((option) => `<button class="quick-btn" type="button" data-answer="${escapeAttr(option)}">${escapeHtml(option)}</button>`).join('')}
+          </div>
+        `;
+        els.answerArea.querySelectorAll('[data-answer]').forEach((button) => {
+          button.addEventListener('click', () => sendAnswer(button.dataset.answer, 'button'));
+        });
+        return;
+      }
+
+      if (q.type === 'text') {
+        els.answerArea.innerHTML = `
+          ${meta}
+          <div class="input-row">
+            <textarea id="textAnswer" placeholder="${escapeAttr(q.placeholder || 'Digite sua resposta curta...')}"></textarea>
+            <button class="primary-btn" type="button" id="sendText">Enviar</button>
+          </div>
+        `;
+        document.getElementById('sendText').addEventListener('click', () => sendAnswer(document.getElementById('textAnswer').value.trim(), 'text'));
+        return;
+      }
+
+      if (q.type === 'contact') {
+        els.answerArea.innerHTML = `
+          ${meta}
+          <div class="input-grid">
+            <input id="contactWhatsapp" type="tel" autocomplete="tel" placeholder="WhatsApp" />
+            <input id="contactEmail" type="email" autocomplete="email" placeholder="E-mail opcional" />
+          </div>
+          <button class="primary-btn" type="button" id="sendContact">Salvar e continuar</button>
+          <div class="question-meta"><span>${escapeHtml(q.helper || '')}</span><span></span></div>
+        `;
+        document.getElementById('sendContact').addEventListener('click', () => {
+          const whatsapp = document.getElementById('contactWhatsapp').value.trim();
+          const email = document.getElementById('contactEmail').value.trim();
+          if (!whatsapp) {
+            addMessage({ sender: 'assistant', message: 'Preciso do WhatsApp para salvar o envio do resultado completo.', metadata: { kind: 'error' } });
+            return;
+          }
+          sendAnswer({ whatsapp, email }, 'contact');
+        });
+      }
+    }
+
+    function renderReport(report) {
+      const pillars = report.scores_pilares || {};
+      const labels = {
+        previsibilidade_meta: 'Previsibilidade de meta',
+        gestao_performance: 'Gestao de performance',
+        comissao_incentivo: 'Comissao e incentivo',
+        rotina_acompanhamento: 'Rotina de acompanhamento',
+        correcao_individual: 'Correcao individual',
+        aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
+      };
+      const whatsappText = encodeURIComponent(`Ola, fiz o Raio-X Comercial da VAMO. Meu score foi ${report.score_previsibilidade} e quero entender os principais vazamentos da minha operacao.`);
+      const whatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${whatsappText}`;
+      els.progressFill.style.width = '100%';
+      els.composer.classList.add('hidden');
+      els.chatScroll.classList.add('hidden');
+      els.reportView.classList.add('active');
+      els.reportView.innerHTML = `
+        <div class="report-head">
+          <h2>Seu dashboard do Raio-X Comercial</h2>
+          <p>${escapeHtml(report.resumo_executivo || '')}</p>
+        </div>
+        <div class="dashboard-grid">
+          <article class="dash-card score-card">
+            <p class="card-label">Score de previsibilidade comercial</p>
+            <div class="score-number">${Number(report.score_previsibilidade || 0)}</div>
+            <div class="level">${escapeHtml(report.nivel_operacao || '')}</div>
+            <p class="summary">Score interno de fit VAMO: ${Number(report.fit_vamo_score || 0)}. Recomendacao: ${escapeHtml(report.recomendacao_comercial || '')}.</p>
+          </article>
+          <article class="dash-card pillars-card">
+            <p class="card-label">Radar de maturidade</p>
+            ${Object.entries(labels).map(([key, label]) => pillarRow(label, pillars[key] || 0)).join('')}
+          </article>
+          <article class="dash-card leaks-card">
+            <p class="card-label">Mapa de vazamentos comerciais</p>
+            <div class="leak-list">${(report.vazamentos || []).map(leakMarkup).join('')}</div>
+          </article>
+          <article class="dash-card contradictions-card ${report.contradicoes?.length ? '' : 'hidden'}">
+            <p class="card-label">Contradicoes identificadas</p>
+            <div class="contradiction-list">${(report.contradicoes || []).map((item) => `<div class="mini-item"><p>${escapeHtml(item)}</p></div>`).join('')}</div>
+          </article>
+          <article class="dash-card plan-card">
+            <p class="card-label">Plano de acao em 3 passos</p>
+            <div class="plan-list">${(report.plano_acao || []).map((item, index) => `<div class="mini-item"><div class="mini-title">${index + 1}. ${escapeHtml(item)}</div></div>`).join('')}</div>
+          </article>
+          <article class="dash-card cta-card">
+            <p class="card-label">Proximo passo</p>
+            <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
+            <div class="cta-actions">
+              <a href="${whatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
+              <a href="${whatsappUrl}" target="_blank" rel="noopener">Agendar conversa estrategica</a>
+              <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnostico</button>
+            </div>
+          </article>
+        </div>
+      `;
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.bar-fill').forEach((bar) => {
+          bar.style.width = `${bar.dataset.value}%`;
+        });
+      });
+    }
+
+    function pillarRow(label, value) {
+      const safeValue = Math.max(0, Math.min(100, Number(value) || 0));
+      return `
+        <div class="pillar-row">
+          <span>${escapeHtml(label)}</span>
+          <div class="bar-track"><div class="bar-fill" data-value="${safeValue}"></div></div>
+          <strong>${safeValue}</strong>
+        </div>
+      `;
+    }
+
+    function leakMarkup(leak) {
+      const priority = String(leak.prioridade || 'baixa').toLowerCase();
+      return `
+        <div class="mini-item">
+          <div class="mini-title">
+            <span>${escapeHtml(leak.titulo || '')}</span>
+            <span class="priority ${escapeAttr(priority)}">${escapeHtml(priority)}</span>
+          </div>
+          <p>${escapeHtml(leak.explicacao || '')}</p>
+          <p><strong>Impacto provavel:</strong> ${escapeHtml(leak.impacto || '')}</p>
+        </div>
+      `;
+    }
+
+    function loadingMarkup(text) {
+      return `<div class="loading"><span class="dot"></span><span>${escapeHtml(text)}</span></div>`;
+    }
+
+    function answerToText(answer) {
+      if (typeof answer === 'string') return answer;
+      if (answer && typeof answer === 'object') {
+        return [answer.whatsapp && `WhatsApp: ${answer.whatsapp}`, answer.email && `E-mail: ${answer.email}`, answer.choice, answer.text]
+          .filter(Boolean)
+          .join(' | ');
+      }
+      return '';
+    }
+
+    function blockLabel(blockId) {
+      return ({
+        contexto_comercial: 'Contexto comercial',
+        previsibilidade: 'Previsibilidade',
+        vazamento_performance: 'Vazamento de performance',
+        comissao_incentivo: 'Comissao e incentivo',
+        gestao_correcao: 'Gestao e correcao',
+        finalizacao: 'Finalizacao',
+      })[blockId] || 'Diagnostico';
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, '&#096;');
+    }
+  </script>
+</body>
+</html>
