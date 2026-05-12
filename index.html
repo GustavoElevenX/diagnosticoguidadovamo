@@ -960,11 +960,12 @@
         document.getElementById('sendContact').addEventListener('click', () => {
           const whatsapp = document.getElementById('contactWhatsapp').value.trim();
           const email = document.getElementById('contactEmail').value.trim();
-          if (!whatsapp) {
-            addMessage({ sender: 'assistant', message: 'Preciso do WhatsApp para salvar o envio do resultado completo.', metadata: { kind: 'error' } });
+          const whatsappDigits = whatsapp.replace(/\D/g, '');
+          if (whatsappDigits.length < 10 || whatsappDigits.length > 13) {
+            addMessage({ sender: 'assistant', message: 'Preciso de um WhatsApp válido com DDD para salvar o envio do resultado completo.', metadata: { kind: 'error' } });
             return;
           }
-          sendAnswer({ whatsapp, email }, 'contact');
+          sendAnswer({ whatsapp: whatsappDigits, email }, 'contact');
         });
       }
     }
@@ -988,7 +989,7 @@
       els.reportView.innerHTML = `
         <div class="report-head">
           <h2>Seu dashboard do Raio-X Comercial</h2>
-          <p>${escapeHtml(report.resumo_executivo || '')}</p>
+          <p>${escapeHtml(shortReportIntro(report))}</p>
         </div>
         <div class="dashboard-grid">
           <article class="dash-card executive-card">
@@ -1050,6 +1051,12 @@
       if (value <= 70) return 'Há base de gestão, mas a previsibilidade ainda não está consolidada.';
       if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar.';
       return 'Operação com boa maturidade para escala comercial.';
+    }
+
+    function shortReportIntro(report) {
+      const score = Number(report.score_previsibilidade || 0);
+      const level = report.nivel_operacao || 'operação em análise';
+      return `Score ${score}/100 · ${level}`;
     }
 
     function renderRadarChart(pillars, labels) {
