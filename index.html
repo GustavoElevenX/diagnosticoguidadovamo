@@ -731,7 +731,7 @@
         <div class="brand-badge">Performance Comercial com IA</div>
       </div>
       <h1>Descubra onde sua operação comercial está perdendo vendas.</h1>
-      <p>Em poucos minutos, a VAMO mapeia sinais de vazamento no processo comercial, identifica gargalos de previsibilidade e indica qual estrutura deve ser priorizada antes de falar em IA, CRM ou automação.</p>
+      <p>Em poucos minutos, a VAMO mapeia sinais de vazamento no processo comercial, identifica gargalos de previsibilidade e indica qual estrutura deve ser priorizada antes de investir em tecnologia ou automação.</p>
       <div class="side-list">
         <div class="side-item"><span>1</span><div>Diagnóstico antes da ferramenta.</div></div>
         <div class="side-item"><span>2</span><div>Processo antes da IA.</div></div>
@@ -810,7 +810,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Vou construir seu Mapa de Vazamento de Vendas. Em poucos minutos, vou entender como sua operação comercial funciona hoje, onde o processo pode estar perdendo velocidade, previsibilidade ou padrão, e qual estrutura deveria ser priorizada. IA, CRM e automação entram depois do diagnóstico, não antes. Primeiro, me diga seu nome, empresa e cargo.',
+          message: 'Vou construir seu Mapa de Vazamento de Vendas. Em poucos minutos, vou entender como sua operação comercial funciona hoje, onde o processo pode estar perdendo velocidade, previsibilidade ou padrão, e qual estrutura deveria ser priorizada. Tecnologia e automação entram depois do diagnóstico, não antes. Primeiro, me diga seu nome, empresa e cargo.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -828,7 +828,7 @@
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV3') || localStorage.getItem('vamoSalesLeakMapV1') || 'null');
+        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV3') || 'null');
         if (!saved || saved.report) return;
         Object.assign(state, saved, { busy: false });
       } catch {}
@@ -931,7 +931,6 @@
         state.report = data.report;
         state.question = null;
         localStorage.removeItem('vamoSalesLeakMapV3');
-        localStorage.removeItem('vamoSalesLeakMapV1');
         renderReport(data.report);
       } catch (error) {
         addMessage({

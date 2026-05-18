@@ -35,9 +35,9 @@ Esta versão do diagnóstico segue o posicionamento atual da VAMO:
 - IA como camada de inteligência operacional.
 - Implantação com acompanhamento, não software isolado.
 
-O diagnóstico começa pela operação comercial, lê processo real, encontra vazamentos, mede visibilidade do gestor, rotina, adoção e recomenda a primeira estrutura comercial a priorizar, como Diagnóstico e Priorização VAMO, Agente Qualificador, Máquina de Follow-up, Copiloto do Gestor, Proposta Inteligente ou CRM Vivo / Camada de Inteligência do Funil.
+O diagnóstico começa pela operação comercial, lê processo real, encontra vazamentos, mede visibilidade do gestor, rotina, adoção e recomenda a primeira estrutura comercial a priorizar, como Diagnóstico e Priorização VAMO, Agente Qualificador, Máquina de Follow-up, Copiloto do Gestor, Proposta Inteligente ou Camada de Inteligência do Funil.
 
-A especificação atual está em `docs/diagnostico_vamo_v3_posicionamento_atual.md`. A documentação v2 antiga foi arquivada em `docs/arquivo_legado_comissao_v2.md` e não deve ser usada como fonte de verdade do produto atual.
+A especificação atual está em `docs/diagnostico_vamo_v3_posicionamento_atual.md`. Documentos antigos de comissão não fazem parte do projeto final.
 
 ## Configuração
 
