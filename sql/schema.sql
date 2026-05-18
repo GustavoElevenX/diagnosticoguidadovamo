@@ -60,6 +60,14 @@ create table if not exists daily_ai_learning (
 alter table diagnostics
   add column if not exists diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO';
 
+alter table diagnostics
+  add column if not exists recommended_structure text,
+  add column if not exists urgency_level text,
+  add column if not exists leak_category text;
+
+alter table daily_ai_learning
+  add column if not exists recommended_structure_patterns jsonb default '[]'::jsonb;
+
 create table if not exists diagnostic_question_versions (
   id uuid primary key default gen_random_uuid(),
   version_name text not null,
@@ -106,6 +114,9 @@ select
   score_fit_vamo,
   maturity_level,
   recommended_next_step,
+  recommended_structure,
+  urgency_level,
+  leak_category,
   status,
   consent_contact,
   created_at,
@@ -150,7 +161,7 @@ create policy "question versions service role only"
 insert into diagnostic_question_versions (version_name, active, questions)
 select
   'mapa-vazamento-vendas-v1',
-  true,
+  false,
   '[
     {"id":"seller_count","block":"contexto_comercial","type":"button"},
     {"id":"segment","block":"contexto_comercial","type":"button"},
@@ -165,3 +176,28 @@ select
 where not exists (
   select 1 from diagnostic_question_versions where version_name = 'mapa-vazamento-vendas-v1'
 );
+
+insert into diagnostic_question_versions (version_name, active, questions)
+select
+  'mapa-vazamento-vendas-v2-narrativa-vamo',
+  true,
+  '[
+    {"id":"seller_count","block":"contexto_comercial","type":"button"},
+    {"id":"segment","block":"contexto_comercial","type":"button"},
+    {"id":"main_sales_channel","block":"entrada_oportunidades","type":"button"},
+    {"id":"lead_source","block":"entrada_oportunidades","type":"button"},
+    {"id":"predictability_level","block":"previsibilidade","type":"button"},
+    {"id":"main_sales_leak","block":"vazamentos_funil","type":"button"},
+    {"id":"followup_consistency","block":"rotina_followup","type":"button"},
+    {"id":"crm_visibility","block":"gestao_crm","type":"button"},
+    {"id":"process_adoption","block":"processo_tecnologia","type":"button"},
+    {"id":"implementation_urgency","block":"prioridade_implantacao","type":"button"},
+    {"id":"contact_capture","block":"contato","type":"contact"}
+  ]'::jsonb
+where not exists (
+  select 1 from diagnostic_question_versions where version_name = 'mapa-vazamento-vendas-v2-narrativa-vamo'
+);
+
+update diagnostic_question_versions
+set active = false
+where version_name <> 'mapa-vazamento-vendas-v2-narrativa-vamo';

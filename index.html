@@ -67,6 +67,7 @@
     .brand {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 14px;
     }
 
@@ -106,7 +107,8 @@
       font-weight: 800;
       letter-spacing: .08em;
       text-transform: uppercase;
-      white-space: nowrap;
+      white-space: normal;
+      line-height: 1.25;
     }
 
     .side h1 {
@@ -491,7 +493,7 @@
     .score-card { grid-column: span 4; }
     .pillars-card { grid-column: span 8; }
     .executive-card { grid-column: span 12; }
-    .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 6; }
+    .leaks-card, .contradictions-card, .recommended-structure-card, .plan-card, .cta-card { grid-column: span 6; }
 
     .card-label {
       margin: 0 0 12px;
@@ -547,7 +549,7 @@
 
     .radar-wrap canvas {
       width: 100% !important;
-      max-width: 360px;
+      max-width: 320px;
       height: 260px !important;
     }
 
@@ -709,7 +711,7 @@
       .quick-grid, .input-grid, .input-row { grid-template-columns: 1fr; }
       .msg { max-width: 94%; }
       .dashboard-grid { grid-template-columns: 1fr; }
-      .score-card, .pillars-card, .leaks-card, .contradictions-card, .plan-card, .cta-card { grid-column: span 1; }
+      .score-card, .pillars-card, .leaks-card, .contradictions-card, .recommended-structure-card, .plan-card, .cta-card { grid-column: span 1; }
       .executive-card { grid-column: span 1; grid-template-columns: 1fr; }
       .pillar-row { grid-template-columns: 1fr 42px; }
       .pillar-row .bar-track { grid-column: 1 / -1; grid-row: 2; }
@@ -726,14 +728,16 @@
           <img class="brand-symbol" src="imagens/vamo-logo-cropped.png" alt="" loading="eager" decoding="sync" />
           <span class="brand-word">VAMO</span>
         </div>
-        <div class="brand-badge">IA Comercial</div>
+        <div class="brand-badge">Performance Comercial com IA</div>
       </div>
       <h1>Mapa de Vazamento de Vendas VAMO</h1>
-      <p>Descubra onde sua operação comercial está deixando vendas escaparem. Em poucos minutos, a IA da VAMO identifica os principais vazamentos antes do fechamento.</p>
+      <p>Descubra onde sua operação comercial está deixando vendas escaparem antes de falar de IA, CRM ou automação.</p>
       <div class="side-list">
-        <div class="side-item"><span>1</span><div>Investigação rápida, objetiva e consultiva.</div></div>
-        <div class="side-item"><span>2</span><div>Score, vazamentos e impacto provável ao final.</div></div>
-        <div class="side-item"><span>3</span><div>Recomendação imediata para corrigir a rota.</div></div>
+        <div class="side-item"><span>1</span><div>Identifica vazamentos reais do funil comercial.</div></div>
+        <div class="side-item"><span>2</span><div>Mostra onde o gestor perde previsibilidade.</div></div>
+        <div class="side-item"><span>3</span><div>Aponta a primeira estrutura a priorizar.</div></div>
+        <div class="side-item"><span>4</span><div>Gera uma leitura estratégica para implantação.</div></div>
+        <p>Diagnóstico primeiro. Processo antes da IA. Implantação com acompanhamento.</p>
       </div>
     </aside>
 
@@ -805,7 +809,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Vou criar seu Mapa de Vazamento de Vendas. Minha função é identificar, em poucos minutos, onde sua operação comercial pode estar deixando vendas escaparem antes do fechamento. Primeiro, me diga seu nome, empresa e cargo.',
+          message: 'Vou criar seu Mapa de Vazamento de Vendas. Minha função é identificar, em poucos minutos, onde sua operação comercial pode estar perdendo vendas antes de falar em IA, CRM ou automação. Primeiro, me diga seu nome, empresa e cargo.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -1046,16 +1050,16 @@
     function renderReport(report) {
       const pillars = report.scores_pilares || {};
       const labels = {
-        previsibilidade_meta: 'Previsibilidade de meta',
-        gestao_performance: 'Gestão de performance',
-        comissao_incentivo: 'Comissão e incentivo',
-        rotina_acompanhamento: 'Rotina de acompanhamento',
-        correcao_individual: 'Correção individual',
+        previsibilidade_comercial: 'Previsibilidade comercial',
         aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
+        velocidade_followup: 'Velocidade e follow-up',
+        gestao_funil_crm: 'Gestão do funil/CRM',
+        processo_adocao: 'Processo e adoção',
+        clareza_prioridade: 'Clareza de prioridade',
       };
       const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
-      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero receber uma leitura do meu diagnóstico.');
-      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero marcar uma conversa estratégica para entender as primeiras correções.');
+      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero receber uma leitura estratégica do meu diagnóstico.');
+      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero marcar uma conversa para entender qual estrutura comercial devo priorizar primeiro.');
       const readingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${readingText}`;
       const meetingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${meetingText}`;
       els.progressFill.style.width = '100%';
@@ -1097,6 +1101,15 @@
             <p class="card-label">Contradições identificadas</p>
             <div class="contradiction-list">${(report.contradicoes || []).map((item) => `<div class="mini-item"><p>${escapeHtml(item)}</p></div>`).join('')}</div>
           </article>
+          <article class="dash-card recommended-structure-card">
+            <p class="card-label">Primeira estrutura recomendada</p>
+            <h3>${escapeHtml(report.estrutura_recomendada?.nome || 'Diagnóstico + Priorização VAMO')}</h3>
+            <p class="summary">${escapeHtml(report.estrutura_recomendada?.motivo || '')}</p>
+            <div class="mini-item">
+              <div class="mini-title">Próximo passo</div>
+              <p>${escapeHtml(report.estrutura_recomendada?.proximo_passo || '')}</p>
+            </div>
+          </article>
           <article class="dash-card plan-card">
             <p class="card-label">Recomendação imediata</p>
             <p class="summary">${escapeHtml(report.recomendacao_imediata || '')}</p>
@@ -1123,17 +1136,17 @@
 
     function executiveSignal(score) {
       const value = Number(score || 0);
-      if (value <= 25) return 'Operação no escuro, com alto risco de vendas escapando.';
-      if (value <= 50) return 'Gestão ainda reativa, com correções chegando tarde.';
-      if (value <= 70) return 'Há base de gestão, mas a previsibilidade ainda não está consolidada.';
-      if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar.';
-      return 'Operação com boa maturidade para escala comercial.';
+      if (value <= 25) return 'Operação no escuro, com alto risco de vendas escapando sem o gestor perceber.';
+      if (value <= 50) return 'Gestão ainda reativa, com correções chegando depois que parte das oportunidades já esfriou.';
+      if (value <= 70) return 'Há alguma base comercial, mas a previsibilidade e a rotina ainda não estão consolidadas.';
+      if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar processo, visibilidade e acompanhamento.';
+      return 'Operação com boa maturidade para escalar com mais inteligência e menos dependência manual.';
     }
 
     function shortReportIntro(report) {
       const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
       const level = report.nivel_operacao || 'operação em análise';
-      return `Score ${score}/100 · ${level}`;
+      return `Score ${score}/100 · ${level} · leitura inicial de vazamentos comerciais`;
     }
 
     function renderRadarChart(pillars, labels) {
@@ -1145,7 +1158,7 @@
       radarChartInstance = new Chart(canvas.getContext('2d'), {
         type: 'radar',
         data: {
-          labels: keys.map((key) => labels[key]),
+          labels: keys.map((key) => radarLabel(labels[key])),
           datasets: [{
             data: keys.map((key) => Number(pillars[key] || 0)),
             backgroundColor: 'rgba(0,255,106,.16)',
@@ -1166,7 +1179,7 @@
               ticks: { display: false, stepSize: 20 },
               grid: { color: 'rgba(154,168,160,.18)' },
               angleLines: { color: 'rgba(154,168,160,.18)' },
-              pointLabels: { color: '#d9e6dd', font: { size: 11, weight: '700' } },
+              pointLabels: { color: '#d9e6dd', font: { size: 10, weight: '700' } },
             },
           },
           plugins: { legend: { display: false } },
@@ -1183,6 +1196,17 @@
           <strong>${safeValue}</strong>
         </div>
       `;
+    }
+
+    function radarLabel(label) {
+      return ({
+        'Previsibilidade comercial': ['Previsibilidade', 'comercial'],
+        'Aproveitamento de oportunidades': ['Aproveitamento', 'de oportunidades'],
+        'Velocidade e follow-up': ['Velocidade', 'e follow-up'],
+        'Gestão do funil/CRM': ['Gestão do', 'funil/CRM'],
+        'Processo e adoção': ['Processo', 'e adoção'],
+        'Clareza de prioridade': ['Clareza', 'de prioridade'],
+      })[label] || label;
     }
 
     function leakMarkup(leak) {
@@ -1216,10 +1240,13 @@
     function blockLabel(blockId) {
       return ({
         contexto_comercial: 'Contexto comercial',
-        previsibilidade: 'Previsibilidade',
-        vazamentos: 'Vazamentos de vendas',
-        incentivo: 'Incentivo comercial',
-        prioridade: 'Prioridade',
+        entrada_oportunidades: 'Entrada de oportunidades',
+        previsibilidade: 'Previsibilidade comercial',
+        vazamentos_funil: 'Vazamentos do funil',
+        rotina_followup: 'Rotina e follow-up',
+        gestao_crm: 'Gestão, CRM e visibilidade',
+        processo_tecnologia: 'Processo e tecnologia',
+        prioridade_implantacao: 'Prioridade de implantação',
         contato: 'Contato',
       })[blockId] || 'Diagnóstico';
     }
