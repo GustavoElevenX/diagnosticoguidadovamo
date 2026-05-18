@@ -23,9 +23,11 @@ Se a VAMO decidir integrar dentro da plataforma principal em Next.js, a lógica 
 - `GET /api/diagnostico/:id/report`
 - `POST /api/internal/daily-learning`
 
-## Versão narrativa VAMO
+## Versão ativa
 
-Esta versão do diagnóstico segue a narrativa atual da VAMO:
+Versão interna ativa: `mapa-vazamento-vendas-v3-posicionamento-atual`.
+
+Esta versão do diagnóstico segue o posicionamento atual da VAMO:
 
 - Menos venda perdida. Mais previsibilidade comercial.
 - Diagnóstico antes da ferramenta.
@@ -33,7 +35,9 @@ Esta versão do diagnóstico segue a narrativa atual da VAMO:
 - IA como camada de inteligência operacional.
 - Implantação com acompanhamento, não software isolado.
 
-O diagnóstico gera um Mapa de Vazamento de Vendas e recomenda a primeira estrutura comercial a priorizar, como Máquina de Follow-up, Agente Qualificador, CRM Vivo, Copiloto do Gestor, Proposta Inteligente ou Diagnóstico + Priorização VAMO.
+O diagnóstico começa pela operação comercial, lê processo real, encontra vazamentos, mede visibilidade do gestor, rotina, adoção e recomenda a primeira estrutura comercial a priorizar, como Diagnóstico e Priorização VAMO, Agente Qualificador, Máquina de Follow-up, Copiloto do Gestor, Proposta Inteligente ou CRM Vivo / Camada de Inteligência do Funil.
+
+A especificação atual está em `docs/diagnostico_vamo_v3_posicionamento_atual.md`. A documentação v2 antiga foi arquivada em `docs/arquivo_legado_comissao_v2.md` e não deve ser usada como fonte de verdade do produto atual.
 
 ## Configuração
 

@@ -14,6 +14,15 @@ create table if not exists diagnostics (
   seller_count text,
   sales_channel text,
   sales_model text,
+  business_model text,
+  commercial_process_clarity text,
+  opportunity_handling text,
+  sales_bottleneck text,
+  next_step_discipline text,
+  management_visibility text,
+  commercial_routine text,
+  process_technology_adoption text,
+  implementation_priority text,
   diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO',
   current_step text,
   status text default 'started',
@@ -65,16 +74,37 @@ alter table diagnostics
   add column if not exists urgency_level text,
   add column if not exists leak_category text;
 
+alter table diagnostics
+  add column if not exists business_model text,
+  add column if not exists commercial_process_clarity text,
+  add column if not exists opportunity_handling text,
+  add column if not exists sales_bottleneck text,
+  add column if not exists next_step_discipline text,
+  add column if not exists management_visibility text,
+  add column if not exists commercial_routine text,
+  add column if not exists process_technology_adoption text,
+  add column if not exists implementation_priority text;
+
 alter table daily_ai_learning
   add column if not exists recommended_structure_patterns jsonb default '[]'::jsonb;
 
 create table if not exists diagnostic_question_versions (
   id uuid primary key default gen_random_uuid(),
   version_name text not null,
-  questions jsonb not null,
+  description text,
+  questions jsonb not null default '[]'::jsonb,
+  questions_schema jsonb not null default '[]'::jsonb,
   active boolean default false,
+  is_active boolean default false,
   created_at timestamp with time zone default now()
 );
+
+alter table diagnostic_question_versions
+  add column if not exists description text,
+  add column if not exists questions jsonb not null default '[]'::jsonb,
+  add column if not exists questions_schema jsonb not null default '[]'::jsonb,
+  add column if not exists active boolean default false,
+  add column if not exists is_active boolean default false;
 
 create index if not exists diagnostics_status_idx on diagnostics (status);
 create index if not exists diagnostics_created_at_idx on diagnostics (created_at desc);
@@ -109,6 +139,15 @@ select
   seller_count,
   sales_channel,
   sales_model,
+  business_model,
+  commercial_process_clarity,
+  opportunity_handling,
+  sales_bottleneck,
+  next_step_discipline,
+  management_visibility,
+  commercial_routine,
+  process_technology_adoption,
+  implementation_priority,
   diagnostic_name,
   score_previsibilidade,
   score_fit_vamo,
@@ -158,46 +197,56 @@ create policy "question versions service role only"
   using (auth.role() = 'service_role')
   with check (auth.role() = 'service_role');
 
-insert into diagnostic_question_versions (version_name, active, questions)
+insert into diagnostic_question_versions (
+  version_name,
+  description,
+  questions,
+  questions_schema,
+  active,
+  is_active
+)
 select
-  'mapa-vazamento-vendas-v1',
-  false,
+  'mapa-vazamento-vendas-v3-posicionamento-atual',
+  'Diagnóstico alinhado ao posicionamento atual da VAMO: vazamento comercial, processo, implantação e acompanhamento.',
   '[
-    {"id":"seller_count","block":"contexto_comercial","type":"button"},
-    {"id":"segment","block":"contexto_comercial","type":"button"},
-    {"id":"sales_channel","block":"contexto_comercial","type":"button"},
-    {"id":"predictability_level","block":"previsibilidade","type":"button"},
-    {"id":"main_sales_leak","block":"vazamentos","type":"button"},
-    {"id":"followup_loss","block":"vazamentos","type":"button"},
-    {"id":"incentive_model","block":"incentivo","type":"button"},
-    {"id":"urgency","block":"prioridade","type":"button"},
+    {"id":"seller_count","block":"operacao_comercial","type":"button"},
+    {"id":"business_model","block":"operacao_comercial","type":"button"},
+    {"id":"commercial_process_clarity","block":"processo_real","type":"button"},
+    {"id":"opportunity_handling","block":"aproveitamento_oportunidades","type":"button"},
+    {"id":"sales_bottleneck","block":"vazamento_principal","type":"button"},
+    {"id":"next_step_discipline","block":"continuidade_comercial","type":"button"},
+    {"id":"management_visibility","block":"gestao_previsibilidade","type":"button"},
+    {"id":"commercial_routine","block":"gestao_previsibilidade","type":"button"},
+    {"id":"process_technology_adoption","block":"adocao_operacional","type":"button"},
+    {"id":"implementation_priority","block":"prioridade_implantacao","type":"button"},
     {"id":"contact_capture","block":"contato","type":"contact"}
-  ]'::jsonb
-where not exists (
-  select 1 from diagnostic_question_versions where version_name = 'mapa-vazamento-vendas-v1'
-);
-
-insert into diagnostic_question_versions (version_name, active, questions)
-select
-  'mapa-vazamento-vendas-v2-narrativa-vamo',
+  ]'::jsonb,
+  '[
+    {"id":"seller_count","block":"operacao_comercial","type":"button"},
+    {"id":"business_model","block":"operacao_comercial","type":"button"},
+    {"id":"commercial_process_clarity","block":"processo_real","type":"button"},
+    {"id":"opportunity_handling","block":"aproveitamento_oportunidades","type":"button"},
+    {"id":"sales_bottleneck","block":"vazamento_principal","type":"button"},
+    {"id":"next_step_discipline","block":"continuidade_comercial","type":"button"},
+    {"id":"management_visibility","block":"gestao_previsibilidade","type":"button"},
+    {"id":"commercial_routine","block":"gestao_previsibilidade","type":"button"},
+    {"id":"process_technology_adoption","block":"adocao_operacional","type":"button"},
+    {"id":"implementation_priority","block":"prioridade_implantacao","type":"button"},
+    {"id":"contact_capture","block":"contato","type":"contact"}
+  ]'::jsonb,
   true,
-  '[
-    {"id":"seller_count","block":"contexto_comercial","type":"button"},
-    {"id":"segment","block":"contexto_comercial","type":"button"},
-    {"id":"main_sales_channel","block":"entrada_oportunidades","type":"button"},
-    {"id":"lead_source","block":"entrada_oportunidades","type":"button"},
-    {"id":"predictability_level","block":"previsibilidade","type":"button"},
-    {"id":"main_sales_leak","block":"vazamentos_funil","type":"button"},
-    {"id":"followup_consistency","block":"rotina_followup","type":"button"},
-    {"id":"crm_visibility","block":"gestao_crm","type":"button"},
-    {"id":"process_adoption","block":"processo_tecnologia","type":"button"},
-    {"id":"implementation_urgency","block":"prioridade_implantacao","type":"button"},
-    {"id":"contact_capture","block":"contato","type":"contact"}
-  ]'::jsonb
+  true
 where not exists (
-  select 1 from diagnostic_question_versions where version_name = 'mapa-vazamento-vendas-v2-narrativa-vamo'
+  select 1 from diagnostic_question_versions
+  where version_name = 'mapa-vazamento-vendas-v3-posicionamento-atual'
 );
 
 update diagnostic_question_versions
-set active = false
-where version_name <> 'mapa-vazamento-vendas-v2-narrativa-vamo';
+set active = false,
+    is_active = false
+where version_name <> 'mapa-vazamento-vendas-v3-posicionamento-atual';
+
+update diagnostic_question_versions
+set active = true,
+    is_active = true
+where version_name = 'mapa-vazamento-vendas-v3-posicionamento-atual';

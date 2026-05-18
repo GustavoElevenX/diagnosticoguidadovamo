@@ -730,14 +730,14 @@
         </div>
         <div class="brand-badge">Performance Comercial com IA</div>
       </div>
-      <h1>Mapa de Vazamento de Vendas VAMO</h1>
-      <p>Descubra onde sua operação comercial está deixando vendas escaparem antes de falar de IA, CRM ou automação.</p>
+      <h1>Descubra onde sua operação comercial está perdendo vendas.</h1>
+      <p>Em poucos minutos, a VAMO mapeia sinais de vazamento no processo comercial, identifica gargalos de previsibilidade e indica qual estrutura deve ser priorizada antes de falar em IA, CRM ou automação.</p>
       <div class="side-list">
-        <div class="side-item"><span>1</span><div>Identifica vazamentos reais do funil comercial.</div></div>
-        <div class="side-item"><span>2</span><div>Mostra onde o gestor perde previsibilidade.</div></div>
-        <div class="side-item"><span>3</span><div>Aponta a primeira estrutura a priorizar.</div></div>
-        <div class="side-item"><span>4</span><div>Gera uma leitura estratégica para implantação.</div></div>
-        <p>Diagnóstico primeiro. Processo antes da IA. Implantação com acompanhamento.</p>
+        <div class="side-item"><span>1</span><div>Diagnóstico antes da ferramenta.</div></div>
+        <div class="side-item"><span>2</span><div>Processo antes da IA.</div></div>
+        <div class="side-item"><span>3</span><div>Priorização antes da implantação.</div></div>
+        <div class="side-item"><span>4</span><div>Acompanhamento para virar rotina real.</div></div>
+        <p>Menos venda perdida. Mais previsibilidade comercial.</p>
       </div>
     </aside>
 
@@ -762,11 +762,12 @@
 
         <footer class="composer" id="composer">
           <div class="lead-form" id="leadForm">
-            <div class="question-meta"><span>Início</span><span>Pedimos só o essencial agora</span></div>
+            <div class="question-meta"><span>Início</span><span>Preencha seus dados para iniciar o mapa</span></div>
             <input id="leadName" type="text" autocomplete="name" placeholder="Seu nome" />
             <input id="companyName" type="text" autocomplete="organization" placeholder="Empresa" />
             <input id="role" type="text" autocomplete="organization-title" placeholder="Cargo" />
-            <button class="primary-btn" id="startBtn" type="button">Iniciar Mapa</button>
+            <button class="primary-btn" id="startBtn" type="button">Iniciar meu Mapa de Vazamento</button>
+            <div class="question-meta"><span>A leitura é rápida, guiada e focada em identificar onde a venda pode estar vazando hoje.</span><span></span></div>
             <div class="error" id="errorBox"></div>
           </div>
           <div id="answerArea" class="hidden"></div>
@@ -809,7 +810,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Vou criar seu Mapa de Vazamento de Vendas. Minha função é identificar, em poucos minutos, onde sua operação comercial pode estar perdendo vendas antes de falar em IA, CRM ou automação. Primeiro, me diga seu nome, empresa e cargo.',
+          message: 'Vou construir seu Mapa de Vazamento de Vendas. Em poucos minutos, vou entender como sua operação comercial funciona hoje, onde o processo pode estar perdendo velocidade, previsibilidade ou padrão, e qual estrutura deveria ser priorizada. IA, CRM e automação entram depois do diagnóstico, não antes. Primeiro, me diga seu nome, empresa e cargo.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -827,14 +828,14 @@
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV1') || 'null');
+        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV3') || localStorage.getItem('vamoSalesLeakMapV1') || 'null');
         if (!saved || saved.report) return;
         Object.assign(state, saved, { busy: false });
       } catch {}
     }
 
     function persistState() {
-      localStorage.setItem('vamoSalesLeakMapV1', JSON.stringify({
+      localStorage.setItem('vamoSalesLeakMapV3', JSON.stringify({
         diagnosticId: state.diagnosticId,
         question: state.question,
         messages: state.messages,
@@ -929,6 +930,7 @@
         const data = await api('/api/diagnostico/finalize', { diagnostic_id: state.diagnosticId });
         state.report = data.report;
         state.question = null;
+        localStorage.removeItem('vamoSalesLeakMapV3');
         localStorage.removeItem('vamoSalesLeakMapV1');
         renderReport(data.report);
       } catch (error) {
@@ -1050,16 +1052,17 @@
     function renderReport(report) {
       const pillars = report.scores_pilares || {};
       const labels = {
-        previsibilidade_comercial: 'Previsibilidade comercial',
-        aproveitamento_oportunidades: 'Aproveitamento de oportunidades',
-        velocidade_followup: 'Velocidade e follow-up',
-        gestao_funil_crm: 'Gestão do funil/CRM',
-        processo_adocao: 'Processo e adoção',
-        clareza_prioridade: 'Clareza de prioridade',
+        clareza_processo_comercial: 'Clareza do processo',
+        aproveitamento_oportunidades: 'Aproveitamento das oportunidades',
+        continuidade_comercial: 'Continuidade da venda',
+        visibilidade_gestao: 'Visibilidade do gestor',
+        rotina_previsibilidade: 'Rotina e previsibilidade',
+        adocao_operacional: 'Adoção operacional',
+        prioridade_implantacao: 'Prioridade de implantação',
       };
-      const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
-      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero receber uma leitura estratégica do meu diagnóstico.');
-      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO e quero marcar uma conversa para entender qual estrutura comercial devo priorizar primeiro.');
+      const score = Number(report.score_previsibilidade_comercial ?? report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
+      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO. Quero validar minha leitura e entender qual estrutura comercial deveria ser priorizada primeiro.');
+      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO. Quero validar minha leitura e entender qual estrutura comercial deveria ser priorizada primeiro.');
       const readingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${readingText}`;
       const meetingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${meetingText}`;
       els.progressFill.style.width = '100%';
@@ -1083,7 +1086,7 @@
             </div>
           </article>
           <article class="dash-card score-card">
-            <p class="card-label">Score de Vendas Previsíveis</p>
+            <p class="card-label">Score de Previsibilidade Comercial</p>
             <div class="score-number">${score}</div>
             <div class="level">${escapeHtml(report.nivel_operacao || '')}</div>
             <p class="summary">Quanto menor o score, maior a chance de vendas escaparem sem correção a tempo.</p>
@@ -1109,18 +1112,22 @@
               <div class="mini-title">Próximo passo</div>
               <p>${escapeHtml(report.estrutura_recomendada?.proximo_passo || '')}</p>
             </div>
+            <div class="mini-item">
+              <div class="mini-title">Por que não começar pela ferramenta</div>
+              <p>${escapeHtml(report.por_que_nao_comecar_pela_ferramenta || '')}</p>
+            </div>
           </article>
           <article class="dash-card plan-card">
-            <p class="card-label">Recomendação imediata</p>
-            <p class="summary">${escapeHtml(report.recomendacao_imediata || '')}</p>
+            <p class="card-label">Diagnóstico central</p>
+            <p class="summary">${escapeHtml(report.diagnostico_central || report.recomendacao_imediata || '')}</p>
             <div class="plan-list">${(report.plano_acao || []).map((item, index) => `<div class="mini-item"><div class="mini-title">${index + 1}. ${escapeHtml(item)}</div></div>`).join('')}</div>
           </article>
           <article class="dash-card cta-card">
             <p class="card-label">Próximo passo</p>
             <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
             <div class="cta-actions">
-              <a href="${readingWhatsappUrl}" target="_blank" rel="noopener">Receber leitura no WhatsApp</a>
-              <a href="${meetingWhatsappUrl}" target="_blank" rel="noopener">Agendar conversa estratégica</a>
+              <a href="${readingWhatsappUrl}" target="_blank" rel="noopener">Quero uma leitura da VAMO sobre meu mapa</a>
+              <a href="${meetingWhatsappUrl}" target="_blank" rel="noopener">Quero validar meu mapa com a VAMO</a>
               <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnóstico</button>
             </div>
           </article>
@@ -1136,15 +1143,15 @@
 
     function executiveSignal(score) {
       const value = Number(score || 0);
-      if (value <= 25) return 'Operação no escuro, com alto risco de vendas escapando sem o gestor perceber.';
-      if (value <= 50) return 'Gestão ainda reativa, com correções chegando depois que parte das oportunidades já esfriou.';
-      if (value <= 70) return 'Há alguma base comercial, mas a previsibilidade e a rotina ainda não estão consolidadas.';
-      if (value <= 85) return 'Operação gerenciável, com pontos claros para refinar processo, visibilidade e acompanhamento.';
-      return 'Operação com boa maturidade para escalar com mais inteligência e menos dependência manual.';
+      if (value >= 82) return 'Operação com boa base para ganhar inteligência operacional, automação e previsibilidade.';
+      if (value >= 66) return 'A operação funciona, mas há gargalos claros para corrigir com implantação focada.';
+      if (value >= 48) return 'A venda ainda depende de pessoas específicas, memória, cobrança e improviso.';
+      if (value >= 32) return 'Há vazamentos relevantes de processo, continuidade e gestão.';
+      return 'Antes de qualquer IA, é preciso estruturar um processo comercial mínimo.';
     }
 
     function shortReportIntro(report) {
-      const score = Number(report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
+      const score = Number(report.score_previsibilidade_comercial ?? report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
       const level = report.nivel_operacao || 'operação em análise';
       return `Score ${score}/100 · ${level} · leitura inicial de vazamentos comerciais`;
     }
@@ -1200,12 +1207,13 @@
 
     function radarLabel(label) {
       return ({
-        'Previsibilidade comercial': ['Previsibilidade', 'comercial'],
-        'Aproveitamento de oportunidades': ['Aproveitamento', 'de oportunidades'],
-        'Velocidade e follow-up': ['Velocidade', 'e follow-up'],
-        'Gestão do funil/CRM': ['Gestão do', 'funil/CRM'],
-        'Processo e adoção': ['Processo', 'e adoção'],
-        'Clareza de prioridade': ['Clareza', 'de prioridade'],
+        'Clareza do processo': ['Clareza do', 'processo'],
+        'Aproveitamento das oportunidades': ['Aproveitamento', 'das oportunidades'],
+        'Continuidade da venda': ['Continuidade', 'da venda'],
+        'Visibilidade do gestor': ['Visibilidade', 'do gestor'],
+        'Rotina e previsibilidade': ['Rotina e', 'previsibilidade'],
+        'Adoção operacional': ['Adoção', 'operacional'],
+        'Prioridade de implantação': ['Prioridade de', 'implantação'],
       })[label] || label;
     }
 
@@ -1239,13 +1247,13 @@
 
     function blockLabel(blockId) {
       return ({
-        contexto_comercial: 'Contexto comercial',
-        entrada_oportunidades: 'Entrada de oportunidades',
-        previsibilidade: 'Previsibilidade comercial',
-        vazamentos_funil: 'Vazamentos do funil',
-        rotina_followup: 'Rotina e follow-up',
-        gestao_crm: 'Gestão, CRM e visibilidade',
-        processo_tecnologia: 'Processo e tecnologia',
+        operacao_comercial: 'Operação comercial',
+        processo_real: 'Processo real de vendas',
+        aproveitamento_oportunidades: 'Aproveitamento das oportunidades',
+        vazamento_principal: 'Vazamento principal',
+        continuidade_comercial: 'Continuidade comercial',
+        gestao_previsibilidade: 'Gestão e previsibilidade',
+        adocao_operacional: 'Adoção operacional',
         prioridade_implantacao: 'Prioridade de implantação',
         contato: 'Contato',
       })[blockId] || 'Diagnóstico';

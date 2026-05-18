@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "build": "node --check server.js && node --check lib/diagnostic-questions.js && node --check lib/diagnostic-analysis.js && node --check lib/diagnostic-ai.js && node --check lib/diagnostic-api.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
