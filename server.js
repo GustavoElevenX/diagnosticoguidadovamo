@@ -33,7 +33,7 @@ function asyncRoute(handler) {
 
 app.get('/api/config', (req, res) => {
   res.json({
-    whatsappNumber: process.env.NEXT_PUBLIC_VAMO_WHATSAPP_NUMBER || process.env.VAMO_WHATSAPP_NUMBER || '',
+    whatsappNumber: process.env.NEXT_PUBLIC_VERTICE_WHATSAPP_NUMBER || process.env.VERTICE_WHATSAPP_NUMBER || '',
   });
 });
 
@@ -43,11 +43,11 @@ app.post('/api/diagnostico/finalize', asyncRoute((req) => finalizeDiagnostic(req
 app.get('/api/diagnostico/:id/report', asyncRoute((req) => getDiagnosticReport({ id: req.params.id })));
 app.post('/api/internal/daily-learning', asyncRoute((req) => runDailyLearning(req.body, req.headers)));
 
-app.get(['/diagnostico', '/raio-x-comercial'], (req, res) => {
+app.get(['/diagnostico', '/mapa-ponto-critico-operacao-comercial'], (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`VAMO Mapa de Vazamento de Vendas rodando em http://localhost:${PORT}`);
+  console.log(`Vértice Mapa do Ponto Crítico da Operação Comercial rodando em http://localhost:${PORT}`);
 });

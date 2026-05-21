@@ -1,26 +1,26 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mapa de Vazamento de Vendas VAMO</title>
+  <title>Mapa do Ponto Crítico da Operação Comercial Vértice</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     :root {
-      --bg: #080908;
-      --panel: #101312;
-      --panel-2: #151a18;
-      --line: #26302b;
-      --text: #f6fff8;
-      --muted: #9aa8a0;
-      --soft: #d9e6dd;
-      --green: #00ff6a;
-      --green-2: #6dff9d;
-      --green-soft: rgba(0, 255, 106, .13);
-      --amber: #ffbd5a;
-      --red: #ff6868;
-      --blue: #79b8ff;
+      --bg: #0D0D0D;
+      --panel: #181818;
+      --panel-2: #202020;
+      --line: #2A2A2A;
+      --text: #F7F3ED;
+      --muted: #8A8A8A;
+      --soft: #EDE5D8;
+      --orange: #FF6A00;
+      --orange-2: #FF9A3D;
+      --orange-soft: rgba(255, 106, 0, .13);
+      --amber: #FF9A3D;
+      --red: #E65100;
+      --blue: #E65100;
       --radius: 12px;
       --shadow: 0 18px 60px rgba(0, 0, 0, .34);
     }
@@ -30,8 +30,8 @@
       min-height: 100dvh;
       margin: 0;
       background:
-        radial-gradient(circle at 20% 0%, rgba(0, 255, 106, .08), transparent 32rem),
-        linear-gradient(180deg, #0b0d0c 0%, var(--bg) 46%, #050605 100%);
+        radial-gradient(circle at 20% 0%, rgba(255, 106, 0, .08), transparent 32rem),
+        linear-gradient(180deg, #181818 0%, var(--bg) 46%, #070707 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       overflow: hidden;
@@ -55,7 +55,7 @@
       min-height: 0;
       padding: 32px;
       border-right: 1px solid var(--line);
-      background: rgba(10, 12, 11, .78);
+      background: rgba(13, 13, 13, .78);
       position: sticky;
       top: 0;
       display: flex;
@@ -98,9 +98,9 @@
     }
 
     .brand-badge {
-      border: 1px solid rgba(0, 255, 106, .28);
-      color: var(--green);
-      background: var(--green-soft);
+      border: 1px solid rgba(255, 106, 0, .28);
+      color: var(--orange);
+      background: var(--orange-soft);
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 11px;
@@ -150,8 +150,8 @@
       border-radius: 50%;
       display: inline-grid;
       place-items: center;
-      background: var(--green-soft);
-      color: var(--green);
+      background: var(--orange-soft);
+      color: var(--orange);
       font-size: 12px;
       font-weight: 900;
     }
@@ -176,7 +176,7 @@
       grid-template-rows: auto 1fr auto;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(16, 19, 18, .9);
+      background: rgba(24, 24, 24, .9);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
@@ -186,7 +186,7 @@
       border-bottom: 1px solid var(--line);
       display: grid;
       gap: 12px;
-      background: rgba(14, 17, 16, .92);
+      background: rgba(24, 24, 24, .92);
     }
 
     .topline {
@@ -209,8 +209,8 @@
       border-radius: 11px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--green), #aaffbf);
-      color: #061109;
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      color: #0D0D0D;
       font-weight: 950;
       flex: 0 0 auto;
     }
@@ -231,9 +231,9 @@
     }
 
     .time-pill {
-      color: var(--green);
-      background: var(--green-soft);
-      border: 1px solid rgba(0, 255, 106, .22);
+      color: var(--orange);
+      background: var(--orange-soft);
+      border: 1px solid rgba(255, 106, 0, .22);
       border-radius: 999px;
       padding: 7px 10px;
       font-size: 12px;
@@ -243,7 +243,7 @@
 
     .progress {
       height: 6px;
-      background: #080a09;
+      background: #0D0D0D;
       border-radius: 999px;
       overflow: hidden;
       border: 1px solid var(--line);
@@ -253,7 +253,7 @@
       display: block;
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--green), var(--blue));
+      background: linear-gradient(90deg, var(--orange), var(--blue));
       border-radius: inherit;
       transition: width .35s ease;
     }
@@ -293,29 +293,29 @@
     }
 
     .assistant .bubble {
-      background: #0b0e0d;
+      background: #181818;
       border: 1px solid var(--line);
       color: var(--soft);
       border-top-left-radius: 6px;
     }
 
     .user .bubble {
-      background: var(--green);
-      color: #041009;
+      background: var(--orange);
+      color: #0D0D0D;
       font-weight: 750;
       border-top-right-radius: 6px;
     }
 
     .insight .bubble {
-      background: linear-gradient(135deg, rgba(0, 255, 106, .16), rgba(121, 184, 255, .11));
-      border: 1px solid rgba(0, 255, 106, .3);
-      color: #e8fff0;
+      background: linear-gradient(135deg, rgba(255, 106, 0, .14), rgba(230, 81, 0, .09));
+      border: 1px solid rgba(255, 106, 0, .3);
+      color: var(--soft);
     }
 
     .composer {
       padding: 18px 22px 22px;
       border-top: 1px solid var(--line);
-      background: rgba(14, 17, 16, .96);
+      background: rgba(24, 24, 24, .96);
       display: grid;
       gap: 12px;
     }
@@ -347,14 +347,14 @@
       text-align: left;
       padding: 12px 14px;
       color: var(--soft);
-      background: #0a0d0c;
+      background: #101010;
       line-height: 1.35;
       font-weight: 700;
     }
 
     .quick-btn:hover, .ghost-btn:hover {
-      border-color: rgba(0, 255, 106, .45);
-      background: rgba(0, 255, 106, .08);
+      border-color: rgba(255, 106, 0, .45);
+      background: rgba(255, 106, 0, .08);
     }
 
     .quick-btn:active, .primary-btn:active, .ghost-btn:active { transform: scale(.985); }
@@ -376,7 +376,7 @@
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 10px;
-      background: #070908;
+      background: #0D0D0D;
       color: var(--text);
       outline: 0;
       padding: 13px 14px;
@@ -390,14 +390,14 @@
     }
 
     input:focus, textarea:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px var(--green-soft);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px var(--orange-soft);
     }
 
     .primary-btn {
-      background: var(--green);
-      color: #041009;
-      border-color: var(--green);
+      background: var(--orange);
+      color: #0D0D0D;
+      border-color: var(--orange);
       font-weight: 900;
       padding: 0 18px;
       white-space: nowrap;
@@ -421,9 +421,9 @@
       display: none;
       padding: 11px 13px;
       border-radius: 10px;
-      border: 1px solid rgba(255, 104, 104, .35);
-      background: rgba(255, 104, 104, .08);
-      color: #ffb1b1;
+      border: 1px solid rgba(230, 81, 0, .4);
+      background: rgba(230, 81, 0, .1);
+      color: var(--orange-2);
       font-size: 13px;
       line-height: 1.4;
     }
@@ -440,7 +440,7 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--green);
+      background: var(--orange);
       animation: pulse 1s infinite ease-in-out;
     }
 
@@ -483,7 +483,7 @@
     }
 
     .dash-card {
-      background: #0d100f;
+      background: #181818;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 18px;
@@ -508,7 +508,7 @@
       font-size: clamp(56px, 9vw, 84px);
       line-height: .9;
       font-weight: 950;
-      color: var(--green);
+      color: var(--orange);
     }
 
     .level {
@@ -528,8 +528,8 @@
       grid-template-columns: minmax(0, 1.5fr) minmax(220px, .8fr);
       gap: 18px;
       align-items: center;
-      background: linear-gradient(135deg, rgba(0, 255, 106, .14), rgba(121, 184, 255, .08));
-      border-color: rgba(0, 255, 106, .28);
+      background: linear-gradient(135deg, rgba(255, 106, 0, .12), rgba(230, 81, 0, .06));
+      border-color: rgba(255, 106, 0, .28);
     }
 
     .executive-card p:last-child {
@@ -566,7 +566,7 @@
     .bar-track {
       height: 8px;
       border-radius: 999px;
-      background: #060807;
+      background: #0D0D0D;
       overflow: hidden;
       border: 1px solid var(--line);
     }
@@ -575,7 +575,7 @@
       height: 100%;
       width: 0%;
       border-radius: inherit;
-      background: linear-gradient(90deg, var(--red), var(--amber), var(--green));
+      background: linear-gradient(90deg, var(--red), var(--amber), var(--orange));
       transition: width .8s ease;
     }
 
@@ -586,20 +586,20 @@
 
     .mini-item {
       border: 1px solid var(--line);
-      background: #080a09;
+      background: #101010;
       border-radius: 10px;
       padding: 13px;
     }
 
     .mini-item.risk-alta {
-      border-color: rgba(255, 104, 104, .45);
-      background: linear-gradient(135deg, rgba(255, 104, 104, .13), rgba(8, 10, 9, 1));
+      border-color: rgba(230, 81, 0, .45);
+      background: linear-gradient(135deg, rgba(230, 81, 0, .14), rgba(13, 13, 13, 1));
     }
 
     .mini-item.risk-média,
     .mini-item.risk-media {
-      border-color: rgba(255, 189, 90, .45);
-      background: linear-gradient(135deg, rgba(255, 189, 90, .12), rgba(8, 10, 9, 1));
+      border-color: rgba(255, 154, 61, .45);
+      background: linear-gradient(135deg, rgba(255, 154, 61, .13), rgba(13, 13, 13, 1));
     }
 
     .mini-title {
@@ -615,8 +615,8 @@
       border-radius: 999px;
       padding: 4px 8px;
       font-size: 11px;
-      color: #061109;
-      background: var(--green);
+      color: #0D0D0D;
+      background: var(--orange);
       flex: 0 0 auto;
     }
 
@@ -649,8 +649,8 @@
     }
 
     .cta-actions a {
-      background: var(--green);
-      color: #041009;
+      background: var(--orange);
+      color: #0D0D0D;
     }
 
     .hidden { display: none !important; }
@@ -724,20 +724,20 @@
   <div class="app-shell">
     <aside class="side">
       <div class="brand">
-        <div class="brand-lockup" aria-label="VAMO">
-          <img class="brand-symbol" src="/imagens/vamo-logo-cropped.png" alt="" loading="eager" decoding="sync" />
-          <span class="brand-word">VAMO</span>
+        <div class="brand-lockup" aria-label="Vértice">
+          <img class="brand-symbol" src="/imagens/Logo%20V%C3%A9rtice.png" alt="" loading="eager" decoding="sync" />
+          <span class="brand-word">Vértice</span>
         </div>
-        <div class="brand-badge">Performance Comercial com IA</div>
+        <div class="brand-badge">Tecnologia aplicada à operação</div>
       </div>
-      <h1>Descubra onde sua operação comercial está perdendo vendas.</h1>
-      <p>Em poucos minutos, a VAMO mapeia sinais de vazamento no processo comercial, identifica gargalos de previsibilidade e indica qual estrutura deve ser priorizada antes de investir em tecnologia ou automação.</p>
+      <h1>Descubra o ponto crítico que trava sua operação.</h1>
+      <p>Em poucos minutos, a Vértice identifica onde sua operação está perdendo clareza, controle e velocidade antes de indicar qualquer sistema, automação ou IA.</p>
       <div class="side-list">
         <div class="side-item"><span>1</span><div>Diagnóstico antes da ferramenta.</div></div>
         <div class="side-item"><span>2</span><div>Processo antes da IA.</div></div>
         <div class="side-item"><span>3</span><div>Priorização antes da implantação.</div></div>
         <div class="side-item"><span>4</span><div>Acompanhamento para virar rotina real.</div></div>
-        <p>Menos venda perdida. Mais previsibilidade comercial.</p>
+        <p>Mais clareza, controle e execução.</p>
       </div>
     </aside>
 
@@ -748,7 +748,7 @@
             <div class="assistant-id">
               <div class="avatar">V</div>
               <div>
-                <strong>IA de Performance Comercial VAMO</strong>
+                <strong>IA de Diagnóstico Operacional Vértice</strong>
                 <small id="statusText">Pronto para iniciar</small>
               </div>
             </div>
@@ -766,8 +766,8 @@
             <input id="leadName" type="text" autocomplete="name" placeholder="Seu nome" />
             <input id="companyName" type="text" autocomplete="organization" placeholder="Empresa" />
             <input id="role" type="text" autocomplete="organization-title" placeholder="Cargo" />
-            <button class="primary-btn" id="startBtn" type="button">Iniciar meu Mapa de Vazamento</button>
-            <div class="question-meta"><span>A leitura é rápida, guiada e focada em identificar onde a venda pode estar vazando hoje.</span><span></span></div>
+            <button class="primary-btn" id="startBtn" type="button">Mapear minha operação</button>
+            <div class="question-meta"><span>A leitura é rápida, guiada e focada em identificar onde a operação perde clareza, controle ou velocidade.</span><span></span></div>
             <div class="error" id="errorBox"></div>
           </div>
           <div id="answerArea" class="hidden"></div>
@@ -810,7 +810,7 @@
       if (!state.messages.length) {
         addMessage({
           sender: 'assistant',
-          message: 'Vou construir seu Mapa de Vazamento de Vendas. Em poucos minutos, vou entender como sua operação comercial funciona hoje, onde o processo pode estar perdendo velocidade, previsibilidade ou padrão, e qual estrutura deveria ser priorizada. Tecnologia e automação entram depois do diagnóstico, não antes. Primeiro, me diga seu nome, empresa e cargo.',
+          message: 'Vou construir seu Mapa do Ponto Crítico da Operação Comercial. Em poucos minutos, vou entender como sua operação funciona hoje, onde processos, dados e execução podem estar desconectados, e qual frente deveria ser priorizada. Tecnologia e automação entram depois do diagnóstico, não antes. Primeiro, me diga seu nome, empresa e cargo.',
           metadata: { kind: 'intro' },
         }, false);
       }
@@ -828,14 +828,14 @@
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem('vamoSalesLeakMapV3') || 'null');
+        const saved = JSON.parse(localStorage.getItem('verticeCriticalPointMapV1') || 'null');
         if (!saved || saved.report) return;
         Object.assign(state, saved, { busy: false });
       } catch {}
     }
 
     function persistState() {
-      localStorage.setItem('vamoSalesLeakMapV3', JSON.stringify({
+      localStorage.setItem('verticeCriticalPointMapV1', JSON.stringify({
         diagnosticId: state.diagnosticId,
         question: state.question,
         messages: state.messages,
@@ -930,12 +930,12 @@
         const data = await api('/api/diagnostico/finalize', { diagnostic_id: state.diagnosticId });
         state.report = data.report;
         state.question = null;
-        localStorage.removeItem('vamoSalesLeakMapV3');
+        localStorage.removeItem('verticeCriticalPointMapV1');
         renderReport(data.report);
       } catch (error) {
         addMessage({
           sender: 'assistant',
-          message: 'Não conseguimos gerar o mapa completo agora, mas salvamos suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
+          message: 'Não conseguimos gerar o mapa completo agora, mas salvertices suas respostas. Nossa equipe pode enviar uma leitura pelo WhatsApp.',
           metadata: { kind: 'error' },
         });
       } finally {
@@ -1059,9 +1059,9 @@
         adocao_operacional: 'Adoção operacional',
         prioridade_implantacao: 'Prioridade de implantação',
       };
-      const score = Number(report.score_previsibilidade_comercial ?? report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
-      const readingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO. Quero validar minha leitura e entender qual estrutura comercial deveria ser priorizada primeiro.');
-      const meetingText = encodeURIComponent('Olá, fiz o Mapa de Vazamento de Vendas da VAMO. Quero validar minha leitura e entender qual estrutura comercial deveria ser priorizada primeiro.');
+      const score = Number(report.score_maturidade_operacional ?? report.score_resultados_previsiveis ?? report.score_previsibilidade ?? 0);
+      const readingText = encodeURIComponent('Olá, fiz o Mapa do Ponto Crítico da Operação Comercial da Vértice. Quero validar minha leitura e entender qual frente operacional deveria ser priorizada primeiro.');
+      const meetingText = encodeURIComponent('Olá, fiz o Mapa do Ponto Crítico da Operação Comercial da Vértice. Quero validar minha leitura e entender qual frente operacional deveria ser priorizada primeiro.');
       const readingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${readingText}`;
       const meetingWhatsappUrl = `https://wa.me/${state.whatsappNumber || '5598992302212'}?text=${meetingText}`;
       els.progressFill.style.width = '100%';
@@ -1070,7 +1070,7 @@
       els.reportView.classList.add('active');
       els.reportView.innerHTML = `
         <div class="report-head">
-          <h2>Seu Mapa de Vazamento de Vendas</h2>
+          <h2>Seu Mapa do Ponto Crítico da Operação Comercial</h2>
           <p>${escapeHtml(shortReportIntro(report))}</p>
         </div>
         <div class="dashboard-grid">
@@ -1080,15 +1080,15 @@
               <p>${escapeHtml(report.resumo_executivo || '')}</p>
             </div>
             <div>
-              <p class="card-label">Leitura da VAMO</p>
+              <p class="card-label">Leitura da Vértice</p>
               <p>${executiveSignal(score)}</p>
             </div>
           </article>
           <article class="dash-card score-card">
-            <p class="card-label">Score de Previsibilidade Comercial</p>
+            <p class="card-label">Score de Maturidade Operacional</p>
             <div class="score-number">${score}</div>
             <div class="level">${escapeHtml(report.nivel_operacao || '')}</div>
-            <p class="summary">Quanto menor o score, maior a chance de vendas escaparem sem correção a tempo.</p>
+            <p class="summary">Quanto menor o score, maior a chance de resultados escaparem sem correção a tempo.</p>
           </article>
           <article class="dash-card pillars-card">
             <p class="card-label">Radar de maturidade</p>
@@ -1096,8 +1096,8 @@
             ${Object.entries(labels).map(([key, label]) => pillarRow(label, pillars[key] || 0)).join('')}
           </article>
           <article class="dash-card leaks-card">
-            <p class="card-label">3 principais vazamentos de vendas</p>
-            <div class="leak-list">${(report.vazamentos || []).map(leakMarkup).join('')}</div>
+            <p class="card-label">3 principais pontos críticos da operação</p>
+            <div class="leak-list">${(report.pontos_criticos || []).map(leakMarkup).join('')}</div>
           </article>
           <article class="dash-card contradictions-card ${report.contradicoes?.length ? '' : 'hidden'}">
             <p class="card-label">Contradições identificadas</p>
@@ -1105,7 +1105,7 @@
           </article>
           <article class="dash-card recommended-structure-card">
             <p class="card-label">Primeira estrutura recomendada</p>
-            <h3>${escapeHtml(report.estrutura_recomendada?.nome || 'Diagnóstico + Priorização VAMO')}</h3>
+            <h3>${escapeHtml(report.estrutura_recomendada?.nome || 'Diagnóstico + Priorização Vértice')}</h3>
             <p class="summary">${escapeHtml(report.estrutura_recomendada?.motivo || '')}</p>
             <div class="mini-item">
               <div class="mini-title">Próximo passo</div>
@@ -1125,8 +1125,8 @@
             <p class="card-label">Próximo passo</p>
             <p class="summary">${escapeHtml(report.mensagem_cta || '')}</p>
             <div class="cta-actions">
-              <a href="${readingWhatsappUrl}" target="_blank" rel="noopener">Quero uma leitura da VAMO sobre meu mapa</a>
-              <a href="${meetingWhatsappUrl}" target="_blank" rel="noopener">Quero validar meu mapa com a VAMO</a>
+              <a href="${readingWhatsappUrl}" target="_blank" rel="noopener">Quero uma leitura da Vértice sobre meu mapa</a>
+              <a href="${meetingWhatsappUrl}" target="_blank" rel="noopener">Quero validar meu mapa com a Vértice</a>
               <button class="ghost-btn" type="button" onclick="window.print()">Baixar/Salvar diagnóstico</button>
             </div>
           </article>
@@ -1145,14 +1145,14 @@
       if (value >= 82) return 'Operação com boa base para ganhar inteligência operacional, automação e previsibilidade.';
       if (value >= 66) return 'A operação funciona, mas há gargalos claros para corrigir com implantação focada.';
       if (value >= 48) return 'A venda ainda depende de pessoas específicas, memória, cobrança e improviso.';
-      if (value >= 32) return 'Há vazamentos relevantes de processo, continuidade e gestão.';
-      return 'Antes de qualquer IA, é preciso estruturar um processo comercial mínimo.';
+      if (value >= 32) return 'Há pontos críticos relevantes de processo, continuidade e gestão.';
+      return 'Antes de qualquer IA, é preciso estruturar um processo operacional mínimo.';
     }
 
     function shortReportIntro(report) {
-      const score = Number(report.score_previsibilidade_comercial ?? report.score_vendas_previsiveis ?? report.score_previsibilidade ?? 0);
+      const score = Number(report.score_maturidade_operacional ?? report.score_resultados_previsiveis ?? report.score_previsibilidade ?? 0);
       const level = report.nivel_operacao || 'operação em análise';
-      return `Score ${score}/100 · ${level} · leitura inicial de vazamentos comerciais`;
+      return `Score ${score}/100 · ${level} · leitura inicial de pontos críticos operacionais`;
     }
 
     function renderRadarChart(pillars, labels) {
@@ -1167,10 +1167,10 @@
           labels: keys.map((key) => radarLabel(labels[key])),
           datasets: [{
             data: keys.map((key) => Number(pillars[key] || 0)),
-            backgroundColor: 'rgba(0,255,106,.16)',
-            borderColor: '#00ff6a',
-            pointBackgroundColor: '#00ff6a',
-            pointBorderColor: '#061109',
+            backgroundColor: 'rgba(255,106,0,.16)',
+            borderColor: '#FF6A00',
+            pointBackgroundColor: '#FF6A00',
+            pointBorderColor: '#0D0D0D',
             pointRadius: 4,
             borderWidth: 2,
           }],
@@ -1183,9 +1183,9 @@
               min: 0,
               max: 100,
               ticks: { display: false, stepSize: 20 },
-              grid: { color: 'rgba(154,168,160,.18)' },
-              angleLines: { color: 'rgba(154,168,160,.18)' },
-              pointLabels: { color: '#d9e6dd', font: { size: 10, weight: '700' } },
+              grid: { color: 'rgba(138,138,138,.22)' },
+              angleLines: { color: 'rgba(138,138,138,.22)' },
+              pointLabels: { color: '#EDE5D8', font: { size: 10, weight: '700' } },
             },
           },
           plugins: { legend: { display: false } },
@@ -1247,9 +1247,9 @@
     function blockLabel(blockId) {
       return ({
         operacao_comercial: 'Operação comercial',
-        processo_real: 'Processo real de vendas',
+        processo_real: 'Processo real de resultados',
         aproveitamento_oportunidades: 'Aproveitamento das oportunidades',
-        vazamento_principal: 'Vazamento principal',
+        ponto_critico_principal: 'Ponto crítico principal',
         continuidade_comercial: 'Continuidade comercial',
         gestao_previsibilidade: 'Gestão e previsibilidade',
         adocao_operacional: 'Adoção operacional',
@@ -1273,3 +1273,4 @@
   </script>
 </body>
 </html>
+

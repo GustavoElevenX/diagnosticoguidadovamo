@@ -1,4 +1,4 @@
--- VAMO - Mapa de Vazamento de Vendas
+-- Vértice - Mapa do Ponto Crítico da Operação Comercial
 -- Execute este arquivo no SQL Editor do Supabase antes de usar o novo diagnóstico.
 
 create extension if not exists "pgcrypto";
@@ -23,14 +23,14 @@ create table if not exists diagnostics (
   commercial_routine text,
   process_technology_adoption text,
   implementation_priority text,
-  diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO',
+  diagnostic_name text default 'Mapa do Ponto Crítico da Operação Comercial Vértice',
   current_step text,
   status text default 'started',
   raw_answers jsonb default '{}'::jsonb,
-  score_previsibilidade integer,
-  score_fit_vamo integer,
+  score_maturidade_operacional integer,
+  score_fit_vertice integer,
   maturity_level text,
-  main_leaks jsonb default '[]'::jsonb,
+  main_critical_points jsonb default '[]'::jsonb,
   contradictions jsonb default '[]'::jsonb,
   pillar_scores jsonb default '{}'::jsonb,
   final_report jsonb default '{}'::jsonb,
@@ -67,12 +67,14 @@ create table if not exists daily_ai_learning (
 );
 
 alter table diagnostics
-  add column if not exists diagnostic_name text default 'Mapa de Vazamento de Vendas VAMO';
+  add column if not exists diagnostic_name text default 'Mapa do Ponto Crítico da Operação Comercial Vértice';
 
 alter table diagnostics
   add column if not exists recommended_structure text,
   add column if not exists urgency_level text,
-  add column if not exists leak_category text;
+  add column if not exists critical_point_category text,
+  add column if not exists score_maturidade_operacional integer,
+  add column if not exists main_critical_points jsonb default '[]'::jsonb;
 
 alter table diagnostics
   add column if not exists business_model text,
@@ -109,7 +111,7 @@ alter table diagnostic_question_versions
 create index if not exists diagnostics_status_idx on diagnostics (status);
 create index if not exists diagnostics_created_at_idx on diagnostics (created_at desc);
 create index if not exists diagnostics_completed_at_idx on diagnostics (completed_at desc);
-create index if not exists diagnostics_score_fit_idx on diagnostics (score_fit_vamo desc);
+create index if not exists diagnostics_score_fit_idx on diagnostics (score_fit_vertice desc);
 create index if not exists diagnostics_recommended_next_step_idx on diagnostics (recommended_next_step);
 create index if not exists diagnostic_messages_diagnostic_id_idx on diagnostic_messages (diagnostic_id, created_at);
 create index if not exists daily_ai_learning_date_idx on daily_ai_learning (learning_date desc);
@@ -149,13 +151,13 @@ select
   process_technology_adoption,
   implementation_priority,
   diagnostic_name,
-  score_previsibilidade,
-  score_fit_vamo,
+  score_maturidade_operacional,
+  score_fit_vertice,
   maturity_level,
   recommended_next_step,
   recommended_structure,
   urgency_level,
-  leak_category,
+  critical_point_category,
   status,
   consent_contact,
   created_at,
@@ -206,14 +208,14 @@ insert into diagnostic_question_versions (
   is_active
 )
 select
-  'mapa-vazamento-vendas-v3-posicionamento-atual',
-  'Diagnóstico alinhado ao posicionamento atual da VAMO: vazamento comercial, processo, implantação e acompanhamento.',
+  'mapa-ponto-critico-operacao-comercial-v1',
+  'Diagnóstico alinhado ao posicionamento atual da Vértice: ponto crítico operacional, processo, implantação e acompanhamento.',
   '[
     {"id":"seller_count","block":"operacao_comercial","type":"button"},
     {"id":"business_model","block":"operacao_comercial","type":"button"},
     {"id":"commercial_process_clarity","block":"processo_real","type":"button"},
     {"id":"opportunity_handling","block":"aproveitamento_oportunidades","type":"button"},
-    {"id":"sales_bottleneck","block":"vazamento_principal","type":"button"},
+    {"id":"sales_bottleneck","block":"ponto_critico_principal","type":"button"},
     {"id":"next_step_discipline","block":"continuidade_comercial","type":"button"},
     {"id":"management_visibility","block":"gestao_previsibilidade","type":"button"},
     {"id":"commercial_routine","block":"gestao_previsibilidade","type":"button"},
@@ -226,7 +228,7 @@ select
     {"id":"business_model","block":"operacao_comercial","type":"button"},
     {"id":"commercial_process_clarity","block":"processo_real","type":"button"},
     {"id":"opportunity_handling","block":"aproveitamento_oportunidades","type":"button"},
-    {"id":"sales_bottleneck","block":"vazamento_principal","type":"button"},
+    {"id":"sales_bottleneck","block":"ponto_critico_principal","type":"button"},
     {"id":"next_step_discipline","block":"continuidade_comercial","type":"button"},
     {"id":"management_visibility","block":"gestao_previsibilidade","type":"button"},
     {"id":"commercial_routine","block":"gestao_previsibilidade","type":"button"},
@@ -238,15 +240,15 @@ select
   true
 where not exists (
   select 1 from diagnostic_question_versions
-  where version_name = 'mapa-vazamento-vendas-v3-posicionamento-atual'
+  where version_name = 'mapa-ponto-critico-operacao-comercial-v1'
 );
 
 update diagnostic_question_versions
 set active = false,
     is_active = false
-where version_name <> 'mapa-vazamento-vendas-v3-posicionamento-atual';
+where version_name <> 'mapa-ponto-critico-operacao-comercial-v1';
 
 update diagnostic_question_versions
 set active = true,
     is_active = true
-where version_name = 'mapa-vazamento-vendas-v3-posicionamento-atual';
+where version_name = 'mapa-ponto-critico-operacao-comercial-v1';

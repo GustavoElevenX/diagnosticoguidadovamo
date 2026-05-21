@@ -5,7 +5,7 @@ export default async () => {
     secret: process.env.INTERNAL_CRON_SECRET,
   });
 
-  console.log('[VAMO daily learning]', JSON.stringify({
+  console.log('[Vértice daily learning]', JSON.stringify({
     diagnostics_analyzed: result.diagnostics_analyzed,
     since: result.since,
   }));

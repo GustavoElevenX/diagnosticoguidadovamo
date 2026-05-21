@@ -1,6 +1,6 @@
-# Mapa de Vazamento de Vendas VAMO
+# Mapa do Ponto Crítico da Operação Comercial Vértice
 
-Diagnóstico guiado comercial da VAMO em formato de micro-app estático com APIs server-side em Express, Netlify Functions e Vercel Functions.
+Diagnóstico guiado operacional da Vértice em formato de micro-app estático com APIs server-side em Express, Netlify Functions e Vercel Functions.
 
 ## Decisão de arquitetura
 
@@ -13,7 +13,7 @@ Este projeto roda como app separado para o MVP:
 - IA apenas no backend/server-side
 - Aprendizado diário via Netlify Scheduled Function ou endpoint interno
 
-Se a VAMO decidir integrar dentro da plataforma principal em Next.js, a lógica central já está isolada em `lib/` para reaproveitamento.
+Se a Vértice decidir integrar dentro da plataforma principal em Next.js, a lógica central já está isolada em `lib/` para reaproveitamento.
 
 ## Rotas principais
 
@@ -25,25 +25,25 @@ Se a VAMO decidir integrar dentro da plataforma principal em Next.js, a lógica 
 
 ## Versão ativa
 
-Versão interna ativa: `mapa-vazamento-vendas-v3-posicionamento-atual`.
+Versão interna ativa: `mapa-ponto-critico-operacao-comercial-v1`.
 
-Esta versão do diagnóstico segue o posicionamento atual da VAMO:
+Esta versão do diagnóstico segue o posicionamento atual da Vértice:
 
-- Menos venda perdida. Mais previsibilidade comercial.
+- Mais clareza, controle e execução.
 - Diagnóstico antes da ferramenta.
 - Processo antes da IA.
 - IA como camada de inteligência operacional.
 - Implantação com acompanhamento, não software isolado.
 
-O diagnóstico começa pela operação comercial, lê processo real, encontra vazamentos, mede visibilidade do gestor, rotina, adoção e recomenda a primeira estrutura comercial a priorizar, como Diagnóstico e Priorização VAMO, Agente Qualificador, Máquina de Follow-up, Copiloto do Gestor, Proposta Inteligente ou Camada de Inteligência do Funil.
+O diagnóstico começa pela operação, lê processo real, encontra pontos críticos, mede visibilidade do gestor, rotina, adoção e recomenda a primeira frente operacional a priorizar, como Diagnóstico Operacional Vértice, Agente Qualificador, Máquina de Follow-up, Copiloto do Gestor, Proposta Inteligente ou Camada de Inteligência do Funil.
 
-A especificação atual está em `docs/diagnostico_vamo_v3_posicionamento_atual.md`. Documentos antigos de comissão não fazem parte do projeto final.
+A especificação atual está em `docs/diagnostico_vertice_ponto_critico_operacao_comercial.md`.
 
 ## Configuração
 
 1. Rode `sql/schema.sql` no SQL Editor do Supabase.
 2. Copie `.env.example` para `.env.local` ou configure as variáveis no ambiente.
-3. Preencha `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `NEXT_PUBLIC_VAMO_WHATSAPP_NUMBER` e `INTERNAL_CRON_SECRET`.
+3. Preencha `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `NEXT_PUBLIC_VERTICE_WHATSAPP_NUMBER` e `INTERNAL_CRON_SECRET`.
 4. Rode localmente com:
 
 ```bash

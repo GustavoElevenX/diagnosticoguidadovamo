@@ -1,7 +1,7 @@
 {
-  "name": "diagnostico-vamo-comercial",
+  "name": "diagnostico-vertice-operacional",
   "version": "1.0.0",
-  "description": "Diagnóstico comercial VAMO com OpenAI + Supabase",
+  "description": "Diagnóstico operacional Vértice com OpenAI + Supabase",
   "main": "server.js",
   "type": "module",
   "scripts": {

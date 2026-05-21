@@ -1,6 +1,6 @@
 {
   "rewrites": [
     { "source": "/diagnostico", "destination": "/index.html" },
-    { "source": "/raio-x-comercial", "destination": "/index.html" }
+    { "source": "/mapa-ponto-critico-operacao-comercial", "destination": "/index.html" }
   ]
 }
